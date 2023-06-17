@@ -1,18 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import InfoIcon from "@mui/icons-material/Info";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -186,6 +181,14 @@ export default function Table({ data, headers, fieldToFocus }: any) {
         return [
           <GridActionsCellItem
             key={id}
+            icon={<InfoIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            key={id}
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
@@ -204,133 +207,31 @@ export default function Table({ data, headers, fieldToFocus }: any) {
     },
   ];
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSubmit = () => {};
-
   return (
-    <>
-      <Box
-        sx={{
-          height: 500,
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
+    <Box
+      sx={{
+        height: 500,
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
+        },
+        "& .textPrimary": {
+          color: "text.primary",
+        },
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        initialState={{
+          pagination: { paginationModel: { page: 0, pageSize: 5 } },
         }}
-      >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          initialState={{
-            pagination: { paginationModel: { page: 0, pageSize: 5 } },
-          }}
-          pageSizeOptions={[5, 10]}
-          slots={{
-            toolbar: (props) =>
-              EditToolbar({
-                ...props,
-                id: rows[rows.length - 1]?.id + 1,
-                fieldToFocus,
-                setOpen,
-              }),
-          }}
-          slotProps={{
-            toolbar: { setRows, setRowModesModel },
-          }}
-        />
-      </Box>
-      <Box>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Subscribe</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
-            </DialogContentText>
-            <TextField
-              margin="dense"
-              id="nome"
-              label="Seu Nome"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="tipoDocumento"
-              label="Tipo de Documento"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="numeroDocumento"
-              label="Numero do Documento"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="logradouro"
-              label="Logradouro"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="numero"
-              label="Número"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="bairro"
-              label="Bairro"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="cidade"
-              label="Cidade"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="uf"
-              label="Estado"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancelar</Button>
-            <Button onClick={handleSubmit}>Salvar</Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
-    </>
+        pageSizeOptions={[5, 10]}
+      />
+    </Box>
   );
 }
