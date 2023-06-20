@@ -35,7 +35,7 @@ function Edit() {
       useCaseGet
         .execute(id)
         .then(async (res) => {
-          const vehicle = await res;
+          const vehicle = await res.toJSON();
           setVehicle(vehicle);
           resolve(true);
         })

@@ -1,46 +1,84 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { GetVehicleUseCase } from "@/src/core/application/vehicle/get-vehicle.use-case";
-import { UpdateVehicleUseCase } from "@/src/core/application/vehicle/update-vehicle.use-case";
-import { Vehicle, VehiclesProps } from "@/src/core/domain/entities/vehicle";
+import { GetDisplacementUseCase } from "@/src/core/application/displacement/get-displacement.use-case";
+import { UpdateDisplacementUseCase } from "@/src/core/application/displacement/update-displacement.use-case";
+import { GetMotoristUseCase } from "@/src/core/application/motorist/get-motorist.use-case";
+import { ListMotoristUseCase } from "@/src/core/application/motorist/list-motorist.use-case";
+import { UpdateMotoristUseCase } from "@/src/core/application/motorist/update-motorist.use-case";
+import { ListUserUseCase } from "@/src/core/application/user/list-user.use-case";
+import { ListVehicleUseCase } from "@/src/core/application/vehicle/list-vehicle.use-case";
+import {
+  Displacement,
+  DisplacementsProps,
+} from "@/src/core/domain/entities/displacement";
+import { Motorist, MotoristsProps } from "@/src/core/domain/entities/motorist";
+import { UsersProps } from "@/src/core/domain/entities/user";
+import { VehiclesProps } from "@/src/core/domain/entities/vehicle";
+import { DisplacementHttpGateway } from "@/src/core/infra/gateways/displacement-http.gateway";
+import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";
+import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
 import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
 import http from "@/src/core/infra/http";
+import { FormControl } from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Item from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 function Edit() {
   const router = useRouter();
 
   const { handleOpenAlert } = useContext(GlobalContext);
 
-  const [vehicle, setVehicle] = useState<VehiclesProps>({
-    placa: "",
-    anoFabricacao: 0,
-    kmAtual: 0,
-    marcaModelo: "",
+  const [user, setUser] = useState<UsersProps[]>([]);
+  const [motorist, setMotorist] = useState<MotoristsProps[]>([]);
+  const [vehicle, setVehicle] = useState<VehiclesProps[]>([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState({ prop: "", message: "" });
+
+  const [displacement, setDisplacement] = useState<DisplacementsProps>({
+    idCliente: 0,
+    idCondutor: 0,
+    idVeiculo: 0,
+    checkList: "",
+    fimDeslocamento: "",
+    inicioDeslocamento: "",
+    kmFinal: 0,
+    kmInicial: 0,
+    motivo: "",
+    observacao: "",
   });
 
   const id = router.query?.id ? +router.query.id : 0;
 
-  const gateway = new VehicleHttpGateway(http);
-  const useCaseGet = new GetVehicleUseCase(gateway);
-  const useCaseUpdate = new UpdateVehicleUseCase(gateway);
+  const gateway = new DisplacementHttpGateway(http);
+  const useCaseGet = new GetDisplacementUseCase(gateway);
+  const useCaseUpdate = new UpdateDisplacementUseCase(gateway);
 
   const getByIdPromise = (id: number) => {
     return new Promise((resolve, reject) => {
       useCaseGet
         .execute(id)
         .then(async (res) => {
-          const vehicle = await res;
-          setVehicle(vehicle);
+          const displacement = await res.toJSON();
+
+          const dataFormat = {
+            ...displacement,
+            fimDeslocamento: displacement.fimDeslocamento
+              ? new Date(displacement.fimDeslocamento).toLocaleDateString(
+                  "pt-BR"
+                )
+              : "",
+          };
+          setDisplacement(dataFormat);
           resolve(true);
         })
         .catch((res) => {
-          router.push("/vehicles").then(() => {
+          router.push("/displacements").then(() => {
             handleOpenAlert({
               open: true,
               message: res?.message || "Houve algum erro",
@@ -52,13 +90,66 @@ function Edit() {
     });
   };
 
+  useEffect(() => {
+    const userGateway = new UserHttpGateway(http);
+    const useCaseUser = new ListUserUseCase(userGateway);
+
+    const motoristGateway = new MotoristHttpGateway(http);
+    const useCaseMotorist = new ListMotoristUseCase(motoristGateway);
+
+    const vehicleGateway = new VehicleHttpGateway(http);
+    const useCaseVehicle = new ListVehicleUseCase(vehicleGateway);
+
+    const userPromise = useCaseUser
+      .execute()
+      .then((res) => setUser(res.map((data) => data.toJSON())));
+
+    const motoristPromise = useCaseMotorist
+      .execute()
+      .then((res) => setMotorist(res.map((data) => data.toJSON())));
+
+    const vehiclePromise = useCaseVehicle
+      .execute()
+      .then((res) => setVehicle(res.map((data) => data.toJSON())));
+
+    Promise.all([userPromise, motoristPromise, vehiclePromise])
+      .then(() => {
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
   const handleSubmitPromise = () => {
     return new Promise((resolve, reject) => {
-      const data = new Vehicle({ ...vehicle });
+      if (displacement.kmFinal == 0) {
+        setError({
+          prop: "kmFinal",
+          message: "Informe uma kilometragem final",
+        });
+        return reject();
+      }
+      if (displacement.fimDeslocamento == "") {
+        setError({
+          prop: "fimDeslocamento",
+          message: "Selecione uma data de fim!",
+        });
+        return reject();
+      }
+
+      if (displacement.observacao == "") {
+        setError({
+          prop: "observacao",
+          message: "Informe uma observação!",
+        });
+        return reject();
+      }
+
+      const data = new Displacement(displacement);
+
       useCaseUpdate
         .execute(id, data)
         .then((res) => {
-          router.push("/vehicles").then(() => {
+          router.push("/displacements").then(() => {
             handleOpenAlert({
               open: true,
               message: res?.message || "Sucesso!",
@@ -68,7 +159,7 @@ function Edit() {
           });
         })
         .catch((res) => {
-          router.push("/vehicles").then(() => {
+          router.push("/displacements").then(() => {
             handleOpenAlert({
               open: true,
               message: res?.message || "Houve algum erro",
@@ -80,76 +171,80 @@ function Edit() {
     });
   };
 
-  const onChange = (attr: string, e: any) => {
-    setVehicle({ ...vehicle, [attr]: e });
+  const onChange = (e: any) => {
+    setError({ prop: "", message: "" });
+    setDisplacement({ ...displacement, [e.id]: e.value });
+  };
+
+  const onFocus = (e: any) => {
+    document.querySelector(`#${e.id}`)?.setAttribute("type", "date");
+  };
+
+  const onBlur = (e: any) => {
+    !e.value.length
+      ? document.querySelector(`#${e.id}`)?.setAttribute("type", "text")
+      : "";
   };
 
   return (
     <FormCreate
-      title="Editar o veículo"
+      title="Encerrar o deslocamento"
       handleSubmitPromise={handleSubmitPromise}
       id={id}
       getByIdPromise={getByIdPromise}
     >
-      <Grid item xs={12} sm={12} md={12}>
-        <Item>
+      <Grid item xs={12} sm={12} md={6}>
+        <FormControl fullWidth required>
           <TextField
-            required
+            sx={{ marginTop: 0 }}
+            error={error.prop == "fimDeslocamento"}
             margin="dense"
-            id="marcaModelo"
-            label="Marca/Modelo"
+            id="fimDeslocamento"
+            label="Fim deslocamento"
             type="text"
             fullWidth
-            onChange={(e) => onChange("marcaModelo", e.target.value)}
-            value={vehicle.marcaModelo}
-            title="Digite a marca ou modelo do veiculo"
+            onChange={(e) => onChange(e.target)}
+            value={displacement.fimDeslocamento}
+            title="Informe o fim do deslocamento"
+            onFocus={(e) => onFocus(e.target)}
+            onBlur={(e) => onBlur(e.target)}
+            helperText={error.prop == "fimDeslocamento" && error.message}
           />
-        </Item>
+        </FormControl>
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
-        <Item>
+        <FormControl fullWidth required>
           <TextField
-            disabled
+            sx={{ marginTop: 0 }}
+            error={error.prop == "kmFinal"}
             margin="dense"
-            id="placa"
-            label="Placa"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange("placa", e.target.value)}
-            value={vehicle.placa}
-            title="Digite a placa do veiculo"
-          />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="anoFabricacao"
-            label="Ano de fabricação"
+            id="kmFinal"
+            label="Km Final"
             type="number"
             fullWidth
-            onChange={(e) => onChange("anoFabricacao", e.target.value)}
-            value={vehicle.anoFabricacao}
-            title="Informe o ano de fabricação do veiculo"
+            onChange={(e) => onChange(e.target)}
+            value={displacement.kmFinal}
+            title="Informe a kilometragem final"
+            helperText={error.prop == "kmFinal" && error.message}
           />
-        </Item>
+        </FormControl>
       </Grid>
-      <Grid item xs={12} sm={12} md={4}>
-        <Item>
+      <Grid item xs={12} sm={12} md={6}>
+        <FormControl fullWidth required>
           <TextField
-            required
+            sx={{ marginTop: 0 }}
+            error={error.prop == "observacao"}
             margin="dense"
-            id="kmAtual"
-            label="Kilometragem"
+            id="observacao"
+            label="Observação"
             type="text"
             fullWidth
-            onChange={(e) => onChange("kmAtual", e.target.value)}
-            value={vehicle.kmAtual}
-            title="Informe a kilometragem do veiculo"
+            onChange={(e) => onChange(e.target)}
+            value={displacement.observacao}
+            title="Informe uma observação"
+            helperText={error.prop == "observacao" && error.message}
           />
-        </Item>
+        </FormControl>
       </Grid>
 
       <Grid container item spacing={1} xs={12}>

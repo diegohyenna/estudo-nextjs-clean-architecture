@@ -1,12 +1,12 @@
 import Table from "@/src/components/table";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { DeleteVehicleUseCase } from "@/src/core/application/vehicle/delete-vehicle.use-case";
-import { ListVehicleUseCase } from "@/src/core/application/vehicle/list-vehicle.use-case";
-import { Vehicle } from "@/src/core/domain/entities/vehicle";
-import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
+import { DeleteDisplacementUseCase } from "@/src/core/application/displacement/delete-displacement.use-case";
+import { ListDisplacementUseCase } from "@/src/core/application/displacement/list-displacement.use-case";
+import { DisplacementsProps } from "@/src/core/domain/entities/displacement";
+import { DisplacementHttpGateway } from "@/src/core/infra/gateways/displacement-http.gateway";
 import http, { StatusReturn } from "@/src/core/infra/http";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import EditIcon from "@mui/icons-material/Edit";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
 import { CircularProgress, ListItem } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -14,17 +14,18 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { GridValueGetterParams } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
-function Vehicles() {
-  const gateway = new VehicleHttpGateway(http);
-  const useCaseList = new ListVehicleUseCase(gateway);
-  const useCaseDelete = new DeleteVehicleUseCase(gateway);
+function Displacements() {
+  const gateway = new DisplacementHttpGateway(http);
+  const useCaseList = new ListDisplacementUseCase(gateway);
+  const useCaseDelete = new DeleteDisplacementUseCase(gateway);
 
   const [loading, setLoading] = useState(true);
 
-  const [data, setData] = useState<Vehicle[]>([]);
+  const [data, setData] = useState<DisplacementsProps[]>([]);
 
   const router = useRouter();
 
@@ -36,21 +37,60 @@ function Vehicles() {
 
   const headers = [
     { field: "id", headerName: "ID", flex: 1 },
-    { field: "placa", headerName: "Placa", minWidth: 180, flex: 1 },
+    { field: "motivo", headerName: "Motivo", flex: 1 },
     {
-      field: "marcaModelo",
-      headerName: "Marca/Modelo",
-      minWidth: 180,
+      field: "kmInicial",
+      headerName: "Km Inicial",
       flex: 1,
     },
     {
-      field: "anoFabricacao",
-      headerName: "Ano",
+      field: "kmFinal",
+      headerName: "Km Final",
       flex: 1,
     },
     {
-      field: "kmAtual",
-      headerName: "Kilometragem",
+      field: "inicioDeslocamento",
+      headerName: "Início",
+      flex: 1,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.inicioDeslocamento
+          ? new Date(params.row.inicioDeslocamento).toLocaleDateString("pt-BR")
+          : "",
+    },
+    {
+      field: "fimDeslocamento",
+      headerName: "Fim",
+      flex: 1,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.fimDeslocamento
+          ? new Date(params.row.fimDeslocamento).toLocaleDateString("pt-BR")
+          : "",
+    },
+    {
+      field: "checkList",
+      headerName: "Checklist",
+      flex: 1,
+    },
+    {
+      field: "observacao",
+      headerName: "Observação",
+      flex: 1,
+    },
+    {
+      field: "idCliente",
+      headerName: "Usuário",
+      flex: 1,
+      // valueGetter: (params: GridValueGetterParams) =>
+      //   new Date(params.row.vencimentoHabilitacao).toLocaleDateString("pt-BR"),
+    },
+    {
+      field: "idCondutor",
+      headerName: "Motorista",
+      flex: 1,
+    },
+    {
+      field: "idVeiculo",
+      headerName: "Veículo",
       flex: 1,
     },
   ];
@@ -65,16 +105,16 @@ function Vehicles() {
   };
 
   const onEdit = (id: number) => () => {
-    router.push(`/vehicles/edit/${id}`);
+    router.push(`/displacements/edit/${id}`);
   };
 
   const onCreate = () => {
-    router.push(`/vehicles/create`);
+    router.push(`/displacements/create`);
   };
 
   const actionButtons = [
     {
-      icon: <EditIcon />,
+      icon: <NoCrashIcon />,
       label: "editar",
       action: onEdit,
       color: "info",
@@ -112,7 +152,7 @@ function Vehicles() {
     useCaseList
       .execute()
       .then((res) => {
-        setData(res);
+        setData(res.map((data) => data.toJSON()));
         setLoading(false);
       })
       .catch((res: StatusReturn) => {
@@ -135,7 +175,7 @@ function Vehicles() {
           headers={headers}
           actionButtons={actionButtons}
           buttonNew={{
-            title: "Criar novo veiculo",
+            title: "Criar novo deslocamento",
             variant: "contained",
             color: "primary",
             onClick: onCreate,
@@ -167,4 +207,4 @@ function Vehicles() {
   );
 }
 
-export default Vehicles;
+export default Displacements;

@@ -2,7 +2,7 @@ import Table from "@/src/components/table";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { DeleteMotoristUseCase } from "@/src/core/application/motorist/delete-motorist.use-case";
 import { ListMotoristUseCase } from "@/src/core/application/motorist/list-motorist.use-case";
-import { Motorist } from "@/src/core/domain/entities/motorist";
+import { Motorist, MotoristsProps } from "@/src/core/domain/entities/motorist";
 import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";
 import http, { StatusReturn } from "@/src/core/infra/http";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -25,8 +25,7 @@ function Motorists() {
 
   const [loading, setLoading] = useState(true);
 
-  //campo categoriaHabilitacao ta diferente na api 'catergoriaHabilitacao', isso quebrou minha tipagem, por isso any aqui
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<MotoristsProps[]>([]);
 
   const router = useRouter();
 
@@ -55,7 +54,11 @@ function Motorists() {
       headerName: "Vencimento",
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
-        new Date(params.row.vencimentoHabilitacao).toLocaleDateString("pt-BR"),
+        params.row.vencimentoHabilitacao
+          ? new Date(params.row.vencimentoHabilitacao).toLocaleDateString(
+              "pt-BR"
+            )
+          : "",
     },
   ];
 
@@ -116,7 +119,7 @@ function Motorists() {
     useCaseList
       .execute()
       .then((res) => {
-        setData(res.map((data) => data.props));
+        setData(res.map((data) => data.toJSON()));
         setLoading(false);
       })
       .catch((res: StatusReturn) => {

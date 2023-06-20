@@ -22,6 +22,7 @@ function Edit() {
   const { handleOpenAlert } = useContext(GlobalContext);
 
   const [motorist, setMotorist] = useState<MotoristsProps>({
+    catergoriaHabilitacao: "",
     categoriaHabilitacao: "",
     nome: "",
     numeroHabilitacao: "",
@@ -39,16 +40,18 @@ function Edit() {
       useCaseGet
         .execute(id)
         .then(async (res) => {
-          //erro na digitacao do campo categoriaHabilitacao na api quebrou minha tipagem aqui
-          const dataFormat = (await res) as any;
-          const vehicle = {
-            ...dataFormat,
-            categoriaHabilitacao: dataFormat.catergoriaHabilitacao,
-            vencimentoHabilitacao: new Date(
-              dataFormat.vencimentoHabilitacao
-            ).toLocaleDateString("pt-BR"),
+          const vehicle = await res.toJSON();
+
+          const dataFormat = {
+            ...vehicle,
+            categoriaHabilitacao: vehicle.catergoriaHabilitacao || "",
+            vencimentoHabilitacao: vehicle.vencimentoHabilitacao
+              ? new Date(vehicle.vencimentoHabilitacao).toLocaleDateString(
+                  "pt-BR"
+                )
+              : "",
           };
-          setMotorist(vehicle);
+          setMotorist(dataFormat);
           resolve(true);
         })
         .catch((res) => {
@@ -66,7 +69,8 @@ function Edit() {
 
   const handleSubmitPromise = () => {
     return new Promise((resolve, reject) => {
-      const data = new Motorist({ ...motorist });
+      const data = new Motorist(motorist);
+
       useCaseUpdate
         .execute(id, data)
         .then((res) => {

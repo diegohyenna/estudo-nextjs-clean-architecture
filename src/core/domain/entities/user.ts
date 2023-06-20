@@ -49,7 +49,7 @@ export class User {
     return this.props.uf;
   }
 
-  toJSON() {
+  toJSON(): UsersProps {
     return {
       ...this.props,
     };

@@ -11,7 +11,7 @@ export class VehicleHttpGateway implements VehicleGateway {
   async getAll(): Promise<Vehicle[]> {
     return this.http
       .get<Vehicle[]>(this.CONST_PATH)
-      .then((res) => res.data)
+      .then((res) => res.data.map((data) => new Vehicle(data)))
       .catch((res) =>
         Promise.reject({
           status: 500,
@@ -23,7 +23,7 @@ export class VehicleHttpGateway implements VehicleGateway {
   async getById(id: number): Promise<Vehicle> {
     return this.http
       .get<Vehicle>(`${this.CONST_PATH}/${id}`)
-      .then((res) => res.data)
+      .then((res) => new Vehicle(res.data))
       .catch((res) =>
         Promise.reject({
           status: 500,

@@ -16,7 +16,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
 import { ListUserUseCase } from "@/src/core/application/user/list-user.use-case";
 import { DeleteUserUseCase } from "@/src/core/application/user/delete-user.use-case";
-import { User } from "@/src/core/domain/entities/user";
+import { User, UsersProps } from "@/src/core/domain/entities/user";
 import { CircularProgress, ListItem } from "@mui/material";
 
 function Users() {
@@ -26,7 +26,7 @@ function Users() {
 
   const [loading, setLoading] = useState(true);
 
-  const [data, setData] = useState<User[]>([]);
+  const [data, setData] = useState<UsersProps[]>([]);
 
   const router = useRouter();
 
@@ -133,7 +133,7 @@ function Users() {
     useCaseList
       .execute()
       .then((res) => {
-        setData(res);
+        setData(res.map((data) => data.toJSON()));
         setLoading(false);
       })
       .catch((res: StatusReturn) => {

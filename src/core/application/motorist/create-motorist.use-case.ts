@@ -5,7 +5,7 @@ import { StatusReturn } from "../../infra/http";
 export class CreateMotoristUseCase {
   constructor(private motoristGateway: MotoristGateway) {}
 
-  async execute(vehicle: Motorist): Promise<StatusReturn> {
-    return this.motoristGateway.save(vehicle);
+  async execute(motorist: Motorist): Promise<StatusReturn> {
+    return this.motoristGateway.save(motorist);
   }
 }

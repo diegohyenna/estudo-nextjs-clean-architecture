@@ -2,7 +2,7 @@ import Table from "@/src/components/table";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { DeleteVehicleUseCase } from "@/src/core/application/vehicle/delete-vehicle.use-case";
 import { ListVehicleUseCase } from "@/src/core/application/vehicle/list-vehicle.use-case";
-import { Vehicle } from "@/src/core/domain/entities/vehicle";
+import { Vehicle, VehiclesProps } from "@/src/core/domain/entities/vehicle";
 import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
 import http, { StatusReturn } from "@/src/core/infra/http";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -24,7 +24,7 @@ function Vehicles() {
 
   const [loading, setLoading] = useState(true);
 
-  const [data, setData] = useState<Vehicle[]>([]);
+  const [data, setData] = useState<VehiclesProps[]>([]);
 
   const router = useRouter();
 
@@ -112,7 +112,7 @@ function Vehicles() {
     useCaseList
       .execute()
       .then((res) => {
-        setData(res);
+        setData(res.map((data) => data.toJSON()));
         setLoading(false);
       })
       .catch((res: StatusReturn) => {

@@ -3,6 +3,7 @@ export type MotoristsProps = {
   nome: string;
   numeroHabilitacao: string;
   categoriaHabilitacao: string;
+  catergoriaHabilitacao?: string;
   vencimentoHabilitacao: string;
 };
 
@@ -29,11 +30,12 @@ export class Motorist {
     return this.props.nome;
   }
 
-  toJSON() {
+  toJSON(): MotoristsProps {
     return {
       ...this.props,
-      catergoriaHabilitacao: this.categoriaHabilitacao,
-      vencimentoHabilitacao: new Date(this.vencimentoHabilitacao).toISOString(),
+      vencimentoHabilitacao: this.vencimentoHabilitacao
+        ? new Date(this.vencimentoHabilitacao).toISOString()
+        : "",
     };
   }
 }

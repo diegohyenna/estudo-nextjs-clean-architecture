@@ -29,7 +29,7 @@ export class Vehicle {
     return this.props.kmAtual;
   }
 
-  toJSON() {
+  toJSON(): VehiclesProps {
     return {
       ...this.props,
     };

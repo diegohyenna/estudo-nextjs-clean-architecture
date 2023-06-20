@@ -39,7 +39,7 @@ function Edit() {
       useCaseGet
         .execute(id)
         .then(async (res) => {
-          const user = await res;
+          const user = await res.toJSON();
           setUser(user);
           resolve(true);
         })

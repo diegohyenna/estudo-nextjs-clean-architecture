@@ -11,7 +11,7 @@ export class UserHttpGateway implements UserGateway {
   async getAll(): Promise<User[]> {
     return this.http
       .get<User[]>(this.CONST_PATH)
-      .then((res) => res.data)
+      .then((res) => res.data.map((data) => new User(data)))
       .catch((res) =>
         Promise.reject({
           status: 500,
@@ -23,7 +23,7 @@ export class UserHttpGateway implements UserGateway {
   async getById(id: number): Promise<User> {
     return this.http
       .get<User>(`${this.CONST_PATH}/${id}`)
-      .then((res) => res.data)
+      .then((res) => new User(res.data))
       .catch((res) =>
         Promise.reject({
           status: 500,

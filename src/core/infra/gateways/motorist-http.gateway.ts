@@ -23,7 +23,7 @@ export class MotoristHttpGateway implements MotoristGateway {
   async getById(id: number): Promise<Motorist> {
     return this.http
       .get<Motorist>(`${this.CONST_PATH}/${id}`)
-      .then((res) => res.data)
+      .then((res) => new Motorist(res.data))
       .catch((res) =>
         Promise.reject({
           status: 500,
