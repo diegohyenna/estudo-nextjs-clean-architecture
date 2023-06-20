@@ -1,50 +1,7 @@
-import Table from "@/src/components/table";
-import axios from "axios";
-import { GetServerSideProps } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
-export default function Home({ users }: any) {
-  const headers = [
-    { field: "id", headerName: "ID" },
-    { field: "nome", headerName: "Nome", minWidth: 180, editable: true },
-    {
-      field: "numeroDocumento",
-      headerName: "Nº Doc",
-      editable: true,
-    },
-    {
-      field: "tipoDocumento",
-      headerName: "Tipo Doc",
-      editable: true,
-    },
-    {
-      field: "logradouro",
-      headerName: "Logradouro",
-      minWidth: 180,
-      editable: true,
-    },
-    {
-      field: "numero",
-      headerName: "Número",
-      editable: true,
-    },
-    {
-      field: "bairro",
-      headerName: "Bairro",
-      editable: true,
-    },
-    {
-      field: "cidade",
-      headerName: "Cidade",
-      editable: true,
-    },
-    {
-      field: "uf",
-      headerName: "Estado",
-      editable: true,
-    },
-  ];
-
+export default function Home() {
   return (
     <>
       <Head>
@@ -60,18 +17,9 @@ export default function Home({ users }: any) {
             <code>pages/index.tsx</code>
           </p>
           <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-            </a>
+            <Link href={"/users"}>Users</Link>
           </div>
         </div>
-
-        <Table data={users} headers={headers} fieldToFocus="nome" />
-
         <div>
           <a
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -130,10 +78,3 @@ export default function Home({ users }: any) {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const users = await fetch("http://localhost:3000/api/users").then((res) =>
-    res.json()
-  );
-  return { props: { users } };
-};
