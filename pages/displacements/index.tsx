@@ -4,6 +4,9 @@ import { DeleteDisplacementUseCase } from "@/src/core/application/displacement/d
 import { ListDisplacementUseCase } from "@/src/core/application/displacement/list-displacement.use-case";
 import { DisplacementsProps } from "@/src/core/domain/entities/displacement";
 import { DisplacementHttpGateway } from "@/src/core/infra/gateways/displacement-http.gateway";
+import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";
+import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
+import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
 import http, { StatusReturn } from "@/src/core/infra/http";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
@@ -19,9 +22,17 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
 function Displacements() {
-  const gateway = new DisplacementHttpGateway(http);
-  const useCaseList = new ListDisplacementUseCase(gateway);
-  const useCaseDelete = new DeleteDisplacementUseCase(gateway);
+  const gatewayMotorist = new MotoristHttpGateway(http);
+  const gatewayUser = new UserHttpGateway(http);
+  const gatewayVehicle = new VehicleHttpGateway(http);
+  const gatewayDisplacement = new DisplacementHttpGateway(
+    http,
+    gatewayMotorist,
+    gatewayUser,
+    gatewayVehicle
+  );
+  const useCaseList = new ListDisplacementUseCase(gatewayDisplacement);
+  const useCaseDelete = new DeleteDisplacementUseCase(gatewayDisplacement);
 
   const [loading, setLoading] = useState(true);
 
@@ -80,18 +91,22 @@ function Displacements() {
       field: "idCliente",
       headerName: "Usuário",
       flex: 1,
-      // valueGetter: (params: GridValueGetterParams) =>
-      //   new Date(params.row.vencimentoHabilitacao).toLocaleDateString("pt-BR"),
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.user ? params.row.user.nome : "",
     },
     {
       field: "idCondutor",
       headerName: "Motorista",
       flex: 1,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.vehicle ? params.row.vehicle.marcaModelo : "",
     },
     {
       field: "idVeiculo",
       headerName: "Veículo",
       flex: 1,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.motorist ? params.row.motorist.nome : "",
     },
   ];
 
@@ -152,10 +167,12 @@ function Displacements() {
     useCaseList
       .execute()
       .then((res) => {
+        console.log(res);
         setData(res.map((data) => data.toJSON()));
         setLoading(false);
       })
       .catch((res: StatusReturn) => {
+        console.log(res);
         setData([]);
         setLoading(false);
         handleOpenAlert({ open: true, status: "error", message: res.message });

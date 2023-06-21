@@ -1,4 +1,6 @@
 import { Motorist } from "./motorist";
+import { User } from "./user";
+import { Vehicle } from "./vehicle";
 
 export type DisplacementsProps = {
   id?: number;
@@ -13,6 +15,8 @@ export type DisplacementsProps = {
   idVeiculo: number;
   idCliente: number;
   motorist?: Motorist;
+  vehicle?: Vehicle;
+  user?: User;
 };
 
 export class Displacement {
@@ -60,6 +64,30 @@ export class Displacement {
 
   get idCliente() {
     return this.props.idCliente;
+  }
+
+  get motorist() {
+    return this.props.motorist;
+  }
+
+  get user() {
+    return this.props.user;
+  }
+
+  get vehicle() {
+    return this.props.vehicle;
+  }
+
+  addMotorist(motorist: Motorist) {
+    this.props.motorist = motorist;
+  }
+
+  addVehicle(vehicle: Vehicle) {
+    this.props.vehicle = vehicle;
+  }
+
+  addUser(user: User) {
+    this.props.user = user;
   }
 
   toJSON(): DisplacementsProps {
