@@ -1,6 +1,6 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateVehicleUseCase } from "@/src/core/application/vehicle/create-vehicle.use-case";
+import { CreateVehicleUseCase } from "@/src/core/application/use-cases/vehicle/create-vehicle.use-case";
 import { Vehicle, VehiclesProps } from "@/src/core/domain/entities/vehicle";
 import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
 import http from "@/src/core/infra/http";

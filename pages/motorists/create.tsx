@@ -1,6 +1,6 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateMotoristUseCase } from "@/src/core/application/motorist/create-motorist.use-case";
+import { CreateMotoristUseCase } from "@/src/core/application/use-cases/motorist/create-motorist.use-case";
 import { Motorist, MotoristsProps } from "@/src/core/domain/entities/motorist";
 import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";
 import http from "@/src/core/infra/http";

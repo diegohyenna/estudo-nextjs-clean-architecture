@@ -1,9 +1,9 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { GetMotoristUseCase } from "@/src/core/application/motorist/get-motorist.use-case";
-import { UpdateMotoristUseCase } from "@/src/core/application/motorist/update-motorist.use-case";
-import { GetVehicleUseCase } from "@/src/core/application/vehicle/get-vehicle.use-case";
-import { UpdateVehicleUseCase } from "@/src/core/application/vehicle/update-vehicle.use-case";
+import { GetMotoristUseCase } from "@/src/core/application/use-cases/motorist/get-motorist.use-case";
+import { UpdateMotoristUseCase } from "@/src/core/application/use-cases/motorist/update-motorist.use-case";
+import { GetVehicleUseCase } from "@/src/core/application/use-cases/vehicle/get-vehicle.use-case";
+import { UpdateVehicleUseCase } from "@/src/core/application/use-cases/vehicle/update-vehicle.use-case";
 import { Motorist, MotoristsProps } from "@/src/core/domain/entities/motorist";
 import { Vehicle, VehiclesProps } from "@/src/core/domain/entities/vehicle";
 import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";

@@ -9,8 +9,8 @@ import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import FormCreate from "@/src/components/forms/create";
 import { User, UsersProps } from "@/src/core/domain/entities/user";
 import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
-import { GetUserUseCase } from "@/src/core/application/user/get-user.use-case";
-import { UpdateUserUseCase } from "@/src/core/application/user/update-user.use-case";
+import { GetUserUseCase } from "@/src/core/application/use-cases/user/get-user.use-case";
+import { UpdateUserUseCase } from "@/src/core/application/use-cases/user/update-user.use-case";
 
 function Edit() {
   const router = useRouter();

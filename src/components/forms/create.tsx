@@ -17,22 +17,22 @@ function FormCreate({
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    setLoading(true);
+    // setLoading(true);
 
-    handleSubmitPromise()
-      .then(() => {
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    handleSubmitPromise();
+    //   .then(() => {
+    //     setLoading(false);
+    //   })
+    //   .catch(() => setLoading(false));
   };
 
   useEffect(() => {
-    if (id && getByIdPromise) {
-      setLoading(true);
-      getByIdPromise(id)
-        .then(() => setLoading(false))
-        .catch(() => setLoading(false));
-    }
+    // if (id && getByIdPromise) {
+    //   setLoading(true);
+    //   getByIdPromise(id)
+    //     .then(() => setLoading(false))
+    //     .catch(() => setLoading(false));
+    // }
   }, [id]);
 
   return (

@@ -1,9 +1,9 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateDisplacementUseCase } from "@/src/core/application/displacement/create-displacement.use-case";
-import { ListMotoristUseCase } from "@/src/core/application/motorist/list-motorist.use-case";
-import { ListUserUseCase } from "@/src/core/application/user/list-user.use-case";
-import { ListVehicleUseCase } from "@/src/core/application/vehicle/list-vehicle.use-case";
+import { CreateDisplacementUseCase } from "@/src/core/application/use-cases/displacement/create-displacement.use-case";
+import { ListMotoristUseCase } from "@/src/core/application/use-cases/motorist/list-motorist.use-case";
+import { ListUserUseCase } from "@/src/core/application/use-cases/user/list-user.use-case";
+import { ListVehicleUseCase } from "@/src/core/application/use-cases/vehicle/list-vehicle.use-case";
 import {
   Displacement,
   DisplacementsProps,
@@ -25,6 +25,8 @@ import {
   MenuItem,
   Select,
   TextField,
+  Container,
+  Typography,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -32,10 +34,12 @@ import Item from "@mui/material/ListItem";
 import { useRouter } from "next/router";
 import React, { useContext, useState, useEffect } from "react";
 
+import { useForm } from "react-hook-form";
+
 function Create() {
   const router = useRouter();
 
-  const { handleOpenAlert } = useContext(GlobalContext);
+  const { handleOpenAlert, displacementUseCases } = useContext(GlobalContext);
 
   const [user, setUser] = useState<UsersProps[]>([]);
   const [motorist, setMotorist] = useState<MotoristsProps[]>([]);
@@ -44,6 +48,20 @@ function Create() {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState({ prop: "", message: "" });
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (e: any) => {
+    console.log(errors);
+    console.log(e);
+
+    // setValue("observacao", "arroa");
+  };
 
   const [displacement, setDisplacement] = useState<DisplacementsProps>({
     idCliente: 0,
@@ -60,53 +78,9 @@ function Create() {
 
   const handleSubmitPromise = () => {
     return new Promise((resolve, reject) => {
-      const gateway = new DisplacementHttpGateway(http);
-      const useCase = new CreateDisplacementUseCase(gateway);
-
-      if (displacement.idCliente == 0) {
-        setError({ prop: "idCliente", message: "Selecione um usuário!" });
-        return reject();
-      }
-      if (displacement.idCondutor == 0) {
-        setError({ prop: "idCondutor", message: "Selecione um motorista!" });
-        return reject();
-      }
-      if (displacement.idVeiculo == 0) {
-        setError({ prop: "idVeiculo", message: "Selecione um veículo!" });
-        return reject();
-      }
-      if (displacement.inicioDeslocamento == "") {
-        setError({
-          prop: "inicioDeslocamento",
-          message: "Informe uma data de inicio!",
-        });
-        return reject();
-      }
-      if (displacement.checkList == "") {
-        setError({
-          prop: "checkList",
-          message: "Informe um checklist!",
-        });
-        return reject();
-      }
-      if (displacement.motivo == "") {
-        setError({
-          prop: "motivo",
-          message: "Informe um motivo!",
-        });
-        return reject();
-      }
-      if (displacement.observacao == "") {
-        setError({
-          prop: "observacao",
-          message: "Informe uma observação!",
-        });
-        return reject();
-      }
-
       const data = new Displacement(displacement);
 
-      return useCase
+      return displacementUseCases.useCaseCreate
         .execute(data)
         .then((res) => {
           router.push("/displacements").then(() => {
@@ -183,7 +157,7 @@ function Create() {
   return (
     <FormCreate
       title="Iniciar um deslocamento"
-      handleSubmitPromise={handleSubmitPromise}
+      handleSubmitPromise={handleSubmit(onSubmit)}
     >
       {loading && (
         <ListItem>
@@ -192,7 +166,7 @@ function Create() {
       )}
       {!loading && (
         <>
-          <Grid item xs={12} sm={12} md={6}>
+          {/* <Grid item xs={12} sm={12} md={6}>
             <FormControl fullWidth required error={error.prop == "idCliente"}>
               <InputLabel id="idCliente">Usuários</InputLabel>
               <Select
@@ -312,39 +286,37 @@ function Create() {
               />
             </FormControl>
           </Grid>
+           */}
           <Grid item xs={12} sm={12} md={6}>
-            <FormControl fullWidth required>
-              <TextField
-                sx={{ marginTop: 0 }}
-                error={error.prop == "motivo"}
-                margin="dense"
-                id="motivo"
-                label="Motivo"
-                type="text"
-                fullWidth
-                onChange={(e) => onChange(e.target)}
-                value={displacement.motivo}
-                title="Informe um checklist"
-                helperText={error.prop == "motivo" && error.message}
-              />
-            </FormControl>
+            <TextField
+              // sx={{ marginTop: 0 }}
+              error={errors.motivo ? true : false}
+              margin="dense"
+              label="Motivo"
+              type="text"
+              fullWidth
+              title="Informe um motivo"
+              helperText={errors.motivo ? errors.motivo.message : ""}
+              {...register("motivo", {
+                required: { value: true, message: "Digite um motivo!" },
+              })}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
-            <FormControl fullWidth required>
-              <TextField
-                sx={{ marginTop: 0 }}
-                error={error.prop == "observacao"}
-                margin="dense"
-                id="observacao"
-                label="Observação"
-                type="text"
-                fullWidth
-                onChange={(e) => onChange(e.target)}
-                value={displacement.observacao}
-                title="Informe uma observação"
-                helperText={error.prop == "observacao" && error.message}
-              />
-            </FormControl>
+            <TextField
+              // sx={{ marginTop: 0 }}
+
+              error={errors.observacao ? true : false}
+              margin="dense"
+              label="Observação"
+              type="text"
+              fullWidth
+              title="Informe uma observação"
+              helperText={errors.observacao ? errors.observacao.message : ""}
+              {...register("observacao", {
+                required: { value: true, message: "Digite uma observação!" },
+              })}
+            />
           </Grid>
         </>
       )}
@@ -370,6 +342,42 @@ function Create() {
         </Grid>
       </Grid>
     </FormCreate>
+
+    // <Container maxWidth="sm">
+    //   <Typography variant="h4" align="center" gutterBottom>
+    //     Formulário
+    //   </Typography>
+    //   <form onSubmit={handleSubmit(onSubmit)}>
+
+    //     <TextField
+    //       label="Data de Nascimento"
+    //       fullWidth
+    //       error={errors.dataNascimento ? true : false}
+    //       helperText={errors.dataNascimento && "Digite uma data válida"}
+    //       {...register("dataNascimento", {
+    //         required: true,
+    //         pattern: /^\d{4}-\d{2}-\d{2}$/,
+    //       })}
+    //     />
+
+    //     <TextField
+    //       label="Select"
+    //       select
+    //       fullWidth
+    //       error={errors.select ? true : false}
+    //       helperText={errors.select && "Selecione uma opção"}
+    //       {...register("select", { required: true })}
+    //     >
+    //       <MenuItem value={1}>Opção 1</MenuItem>
+    //       <MenuItem value={2}>Opção 2</MenuItem>
+    //       <MenuItem value={3}>Opção 3</MenuItem>
+    //     </TextField>
+
+    //     <Button type="submit" variant="contained" color="primary" fullWidth>
+    //       Enviar
+    //     </Button>
+    //   </form>
+    // </Container>
   );
 }
 

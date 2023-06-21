@@ -1,6 +1,6 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateUserUseCase } from "@/src/core/application/user/create-user.use-case";
+import { CreateUserUseCase } from "@/src/core/application/use-cases/user/create-user.use-case";
 import { User, UsersProps } from "@/src/core/domain/entities/user";
 import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
 import http from "@/src/core/infra/http";

@@ -1,12 +1,12 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { GetDisplacementUseCase } from "@/src/core/application/displacement/get-displacement.use-case";
-import { UpdateDisplacementUseCase } from "@/src/core/application/displacement/update-displacement.use-case";
-import { GetMotoristUseCase } from "@/src/core/application/motorist/get-motorist.use-case";
-import { ListMotoristUseCase } from "@/src/core/application/motorist/list-motorist.use-case";
-import { UpdateMotoristUseCase } from "@/src/core/application/motorist/update-motorist.use-case";
-import { ListUserUseCase } from "@/src/core/application/user/list-user.use-case";
-import { ListVehicleUseCase } from "@/src/core/application/vehicle/list-vehicle.use-case";
+import { GetDisplacementUseCase } from "@/src/core/application/use-cases/displacement/get-displacement.use-case";
+import { UpdateDisplacementUseCase } from "@/src/core/application/use-cases/displacement/update-displacement.use-case";
+import { GetMotoristUseCase } from "@/src/core/application/use-cases/motorist/get-motorist.use-case";
+import { ListMotoristUseCase } from "@/src/core/application/use-cases/motorist/list-motorist.use-case";
+import { UpdateMotoristUseCase } from "@/src/core/application/use-cases/motorist/update-motorist.use-case";
+import { ListUserUseCase } from "@/src/core/application/use-cases/user/list-user.use-case";
+import { ListVehicleUseCase } from "@/src/core/application/use-cases/vehicle/list-vehicle.use-case";
 import {
   Displacement,
   DisplacementsProps,
