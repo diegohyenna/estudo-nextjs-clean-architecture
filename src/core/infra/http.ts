@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export type StatusReturn = {
+  err?: any;
   status: number;
   message: string;
 };

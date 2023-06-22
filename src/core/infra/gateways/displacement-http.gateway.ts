@@ -76,21 +76,30 @@ export class DisplacementHttpGateway implements DisplacementGateway {
   save(displacement: Displacement): Promise<StatusReturn> {
     const { kmFinal, fimDeslocamento, ...dataFilterProp } =
       displacement.toJSON();
-    return this.http
-      .post(`${this.CONST_PATH}/IniciarDeslocamento`, dataFilterProp)
-      .then(() =>
-        Promise.resolve({
-          status: 200,
-          message: "Registro salvo com sucesso!",
-        })
-      )
-      .catch((res) =>
-        Promise.reject({
-          status: 500,
-          message:
-            res?.response?.data || "Erro ao tentar salvar o deslocamento!",
-        })
-      );
+
+    try {
+      return this.http
+        .post(`${this.CONST_PATH}/IniciarDeslocamento`, dataFilterProp)
+        .then(() =>
+          Promise.resolve({
+            status: 200,
+            message: "Registro salvo com sucesso!",
+          })
+        )
+        .catch((res) => {
+          return Promise.reject({
+            err: res?.response?.data,
+            status: 500,
+            message: "Erro ao tentar salvar o deslocamento!",
+          });
+        });
+    } catch (err: any) {
+      return Promise.reject({
+        err,
+        status: 500,
+        message: err?.message || "Erro ao tentar salvar o deslocamento!",
+      });
+    }
   }
 
   update(id: number, displacement: Displacement): Promise<StatusReturn> {
