@@ -26,16 +26,17 @@ function Create() {
   const [motorist, setMotorist] = useState<MotoristsProps[]>([]);
   const [vehicle, setVehicle] = useState<VehiclesProps[]>([]);
 
+  const [loading, setLoading] = useState(true);
+
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data: any) => {
     const obj = new Displacement(data);
-    displacementUseCases.useCaseCreate
+    return displacementUseCases.useCaseCreate
       .execute(obj)
       .then((res) => {
         router.push("/displacements").then(() => {
@@ -47,13 +48,6 @@ function Create() {
         });
       })
       .catch((res) => {
-        const errors = res?.err?.errors
-          ? Object.values(res?.err?.errors)
-          : null;
-        if (errors)
-          errors.map((error: any) => {
-            res.message = error;
-          });
         router.push("/displacements").then(() => {
           handleOpenAlert({
             open: true,
@@ -63,25 +57,6 @@ function Create() {
         });
       });
   };
-
-  // useEffect(() => {
-  //   if (id && getByIdPromise) {
-  //     setLoading(true);
-  //     getByIdPromise(id)
-  //       .then(() => setLoading(false))
-  //       .catch(() => setLoading(false));
-  //   }
-  // }, [id]);
-
-  // const onChange = (e: any) => {
-  //   setError({ prop: "", message: "" });
-  //   setDisplacement({ ...displacement, [e.id]: e.value });
-  // };
-
-  // const onChangeSelect = (props: any, a: any) => {
-  //   console.log(props);
-  //   // setDisplacement({ ...displacement, [props]: e.value });
-  // };
 
   const onFocus = (e: any) => {
     document.querySelector(`#${e.id}`)?.setAttribute("type", "date");
@@ -116,7 +91,7 @@ function Create() {
       .then((res) => setVehicle(res.map((data) => data.toJSON())));
 
     return Promise.all([userPromise, motoristPromise, vehiclePromise])
-      .then(() => true)
+      .then(() => Promise.resolve(true))
       .catch(() =>
         router.push("/displacements").then(() => {
           handleOpenAlert({
@@ -124,6 +99,7 @@ function Create() {
             message: "Não foi possivel carregar os selects de dados!",
             status: "error",
           });
+          return Promise.reject();
         })
       );
   };
@@ -132,7 +108,9 @@ function Create() {
     <FormCreate
       title="Criar um novo deslocamento"
       onSubmit={handleSubmit(onSubmit)}
-      useEffects={{ action: useEffectAction, dependencyArray: [] }}
+      useEffects={{ action: useEffectAction, dependencyArray: [loading] }}
+      loading={loading}
+      setLoading={setLoading}
     >
       <>
         <Grid item xs={12} sm={12} md={6}>
@@ -219,44 +197,40 @@ function Create() {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
-          <FormControl fullWidth required>
-            <TextField
-              margin="dense"
-              id="kmInicial"
-              label="Km Inicial"
-              type="number"
-              fullWidth
-              title="Informe a kilometragem inicial"
-              // onChange={(e) => onChange(e.target)}
-              error={errors.kmInicial ? true : false}
-              helperText={errors.kmInicial ? errors.kmInicial.message : ""}
-              {...register("kmInicial", {
-                required: {
-                  value: true,
-                  message: "Digite a kilometragem inicial!",
-                },
-              })}
-            />
-          </FormControl>
+          <TextField
+            margin="dense"
+            id="kmInicial"
+            label="Km Inicial"
+            type="number"
+            fullWidth
+            title="Informe a kilometragem inicial"
+            // onChange={(e) => onChange(e.target)}
+            error={errors.kmInicial ? true : false}
+            helperText={errors.kmInicial ? errors.kmInicial.message : ""}
+            {...register("kmInicial", {
+              required: {
+                value: true,
+                message: "Digite a kilometragem inicial!",
+              },
+            })}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
-          <FormControl fullWidth required>
-            <TextField
-              margin="dense"
-              id="checkList"
-              label="Checklist"
-              type="text"
-              fullWidth
-              title="Informe um checklist"
-              // onChange={(e) => onChange(e.target)}
-              error={errors.checkList ? true : false}
-              helperText={errors.checkList ? errors.checkList.message : ""}
-              {...register("checkList", {
-                required: { value: true, message: "Digite um checklist!" },
-              })}
-            />
-          </FormControl>
+          <TextField
+            margin="dense"
+            id="checkList"
+            label="Checklist"
+            type="text"
+            fullWidth
+            title="Informe um checklist"
+            // onChange={(e) => onChange(e.target)}
+            error={errors.checkList ? true : false}
+            helperText={errors.checkList ? errors.checkList.message : ""}
+            {...register("checkList", {
+              required: { value: true, message: "Digite um checklist!" },
+            })}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>

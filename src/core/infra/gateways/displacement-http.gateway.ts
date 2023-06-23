@@ -94,6 +94,8 @@ export class DisplacementHttpGateway implements DisplacementGateway {
           });
         });
     } catch (err: any) {
+      if (typeof err?.message == "object") err.message = err?.title;
+
       return Promise.reject({
         err,
         status: 500,

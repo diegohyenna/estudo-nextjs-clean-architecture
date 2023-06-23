@@ -1,213 +1,210 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateUserUseCase } from "@/src/core/application/use-cases/user/create-user.use-case";
-import { User, UsersProps } from "@/src/core/domain/entities/user";
-import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
-import http from "@/src/core/infra/http";
-import Button from "@mui/material/Button";
+import { User } from "@/src/core/domain/entities/user";
 import Grid from "@mui/material/Grid";
-import Item from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 
 function Create() {
   const router = useRouter();
 
-  const { handleOpenAlert } = useContext(GlobalContext);
+  const { handleOpenAlert, userUseCases } = useContext(GlobalContext);
 
-  const [user, setUser] = useState<UsersProps>({
-    bairro: "",
-    cidade: "",
-    logradouro: "",
-    nome: "",
-    numero: "",
-    numeroDocumento: "",
-    tipoDocumento: "",
-    uf: "",
-  });
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmitPromise = () => {
-    return new Promise((resolve, reject) => {
-      const gateway = new UserHttpGateway(http);
-      const useCase = new CreateUserUseCase(gateway);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-      const data = new User(user);
+  const onSubmit = (data: any) => {
+    const obj = new User(data);
 
-      return useCase
-        .execute(data)
-        .then((res) => {
-          router.push("/users").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Sucesso!",
-              status: "success",
-            });
-            return resolve(true);
-          });
-        })
-        .catch((res) => {
-          router.push("/users").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Houve algum erro",
-              status: "error",
-            });
-            return reject();
+    return userUseCases.useCaseCreate
+      .execute(obj)
+      .then((res) => {
+        router.push("/users").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Sucesso!",
+            status: "success",
           });
         });
-    });
-  };
-
-  const onChange = (e: any) => {
-    setUser({ ...user, [e.id]: e.value });
+      })
+      .catch((res) => {
+        router.push("/users").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Houve algum erro",
+            status: "error",
+          });
+        });
+      });
   };
 
   return (
     <FormCreate
-      title="Criar um novo usuário"
-      handleSubmitPromise={handleSubmitPromise}
+      title="Criar um novo deslocamento"
+      onSubmit={handleSubmit(onSubmit)}
+      loading={loading}
+      setLoading={setLoading}
     >
       <Grid item xs={12} sm={12} md={12}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="nome"
-            label="Seu nome"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.nome}
-            title="Digite o seu nome"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="nome"
+          label="Nome"
+          type="text"
+          fullWidth
+          title="Informe o nome do usuario"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.nome ? true : false}
+          helperText={errors.nome ? errors.nome.message : ""}
+          {...register("nome", {
+            required: {
+              value: true,
+              message: "Digite o nome",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="tipoDocumento"
-            label="Tipo de Documento"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.tipoDocumento}
-            title="Informe o tipo do documento"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="tipoDocumento"
+          label="Tipo de Documento"
+          type="text"
+          fullWidth
+          title="Informe o tipo do documento"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.tipoDocumento ? true : false}
+          helperText={errors.tipoDocumento ? errors.tipoDocumento.message : ""}
+          {...register("tipoDocumento", {
+            required: {
+              value: true,
+              message: "Digite o tipo do documento",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="numeroDocumento"
-            label="Numero do Documento"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.numeroDocumento}
-            title="Informe o numero do documento"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="numeroDocumento"
+          label="Numero do Documento"
+          type="text"
+          fullWidth
+          title="Informe o numero do documento"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.numeroDocumento ? true : false}
+          helperText={
+            errors.numeroDocumento ? errors.numeroDocumento.message : ""
+          }
+          {...register("numeroDocumento", {
+            required: {
+              value: true,
+              message: "Digite o número do documento",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="logradouro"
-            label="Logradouro"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.logradouro}
-            title="Informe o logradouro do endereço"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="logradouro"
+          label="Logradouro"
+          type="text"
+          fullWidth
+          title="Informe o logradouro do endereço"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.logradouro ? true : false}
+          helperText={errors.logradouro ? errors.logradouro.message : ""}
+          {...register("logradouro", {
+            required: {
+              value: true,
+              message: "Digite o logradouro do endereço",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="numero"
-            label="Número"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.numero}
-            title="Informe o numero do endereço"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="numero"
+          label="Número"
+          type="text"
+          fullWidth
+          title="Informe o numero do endereço"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.numero ? true : false}
+          helperText={errors.numero ? errors.numero.message : ""}
+          {...register("numero", {
+            required: {
+              value: true,
+              message: "Digite o número do endereço",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="bairro"
-            label="Bairro"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.bairro}
-            title="Informe o bairro do endereço"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="bairro"
+          label="Bairro"
+          type="text"
+          fullWidth
+          title="Informe o bairro do endereço"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.bairro ? true : false}
+          helperText={errors.bairro ? errors.bairro.message : ""}
+          {...register("bairro", {
+            required: {
+              value: true,
+              message: "Digite o bairro do endereço",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="cidade"
-            label="Cidade"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.cidade}
-            title="Informe a cidade do endereço"
-          />
-        </Item>
+        <TextField
+          margin="dense"
+          id="cidade"
+          label="Cidade"
+          type="text"
+          fullWidth
+          title="Informe a cidade do endereço"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.cidade ? true : false}
+          helperText={errors.cidade ? errors.cidade.message : ""}
+          {...register("cidade", {
+            required: {
+              value: true,
+              message: "Digite a cidade do endereço",
+            },
+          })}
+        />
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
-        <Item>
-          <TextField
-            required
-            margin="dense"
-            id="uf"
-            label="Estado"
-            type="text"
-            fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={user.uf}
-            title="Informe o estado do endereço"
-          />
-        </Item>
-      </Grid>
-
-      <Grid container item spacing={1} xs={12}>
-        <Grid item>
-          <Item>
-            <Button type="submit" variant="contained" color="success">
-              Salvar
-            </Button>
-          </Item>
-        </Grid>
-        <Grid item>
-          <Item>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => router.back()}
-            >
-              Voltar
-            </Button>
-          </Item>
-        </Grid>
+        <TextField
+          margin="dense"
+          id="uf"
+          label="Estado"
+          type="text"
+          fullWidth
+          title="Informe o estado do endereço"
+          // onChange={(e) => onChange(e.target)}
+          error={errors.uf ? true : false}
+          helperText={errors.uf ? errors.uf.message : ""}
+          {...register("uf", {
+            required: {
+              value: true,
+              message: "Digite o estado do endereço",
+            },
+          })}
+        />
       </Grid>
     </FormCreate>
   );
