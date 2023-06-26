@@ -28,6 +28,11 @@ export default function ResponsiveDrawer(props: any) {
     setMobileOpen(!mobileOpen);
   };
 
+  const onClick = (href: string) => {
+    router.push(href);
+    setMobileOpen(false);
+  };
+
   const routes = [
     { title: "Início", href: "/" },
     { title: "Usuários", href: "/users" },
@@ -46,7 +51,7 @@ export default function ResponsiveDrawer(props: any) {
           .filter((route) => route.href != "/about")
           .map((route, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton href={route.href} LinkComponent={Link}>
+              <ListItemButton onClick={() => onClick(route.href)}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -61,7 +66,7 @@ export default function ResponsiveDrawer(props: any) {
           .filter((route) => route.href == "/about")
           .map((route, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton href={route.href} LinkComponent={Link}>
+              <ListItemButton onClick={() => onClick(route.href)}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
