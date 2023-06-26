@@ -1,5 +1,5 @@
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Grid, Snackbar } from "@mui/material";
 import { ReactNode, useContext } from "react";
 
 import ResponsiveDrawer from "../components/drawer";
@@ -12,22 +12,20 @@ export default function Layout({ ...props }: any) {
   };
 
   return (
-    <>
-      <ResponsiveDrawer>
-        {alert?.open && (
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            open={alert.open}
-            onClose={handleCloseSnackbar}
-            autoHideDuration={6000}
-          >
-            <Alert onClose={handleCloseSnackbar} severity={alert.status}>
-              {alert.message}
-            </Alert>
-          </Snackbar>
-        )}
-        {props.children}
-      </ResponsiveDrawer>
-    </>
+    <ResponsiveDrawer>
+      {alert?.open && (
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={alert.open}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={alert.status}>
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      )}
+      <>{props.children}</>
+    </ResponsiveDrawer>
   );
 }

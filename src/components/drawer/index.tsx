@@ -1,6 +1,7 @@
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Grid } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -82,7 +83,7 @@ export default function ResponsiveDrawer(props: any) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Grid container sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -106,7 +107,7 @@ export default function ResponsiveDrawer(props: any) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box
+      <Grid
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
@@ -142,8 +143,8 @@ export default function ResponsiveDrawer(props: any) {
         >
           {drawer}
         </Drawer>
-      </Box>
-      <Box
+      </Grid>
+      <Grid
         component="main"
         sx={{
           flexGrow: 1,
@@ -153,7 +154,7 @@ export default function ResponsiveDrawer(props: any) {
       >
         <Toolbar />
         {props.children}
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 }

@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import { CircularProgress, Divider, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -16,6 +17,12 @@ type FormProps = {
   loading: boolean;
   setLoading: React.Dispatch<any>;
 };
+
+// const FormContainer = styled()`
+//   .MuiDivider-root {
+
+//   }
+// `;
 
 function FormCreate({
   useEffects,
@@ -50,7 +57,7 @@ function FormCreate({
     <form onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={12}>
-          <Divider>
+          <Divider sx={{ whiteSpace: "unset" }}>
             <Typography variant="h4">{title}</Typography>
           </Divider>
           {loading && (

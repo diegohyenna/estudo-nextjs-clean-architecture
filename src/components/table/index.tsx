@@ -14,6 +14,16 @@ const DataGridContainer = styled(DataGrid)`
       width: 100% !important;
       max-width: unset !important;
     }
+
+    /* .MuiDataGrid-cell {
+      width: 100% !important;
+      max-width: unset !important;
+      min-width: unset !important;
+    } */
+
+    /* .MuiDataGrid-row {
+      width: auto;
+    } */
   }
 `;
 
