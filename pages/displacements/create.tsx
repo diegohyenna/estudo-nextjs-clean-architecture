@@ -7,7 +7,7 @@ import { VehiclesProps } from "@/src/core/domain/entities/vehicle";
 import { MenuItem, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 
 function Create() {

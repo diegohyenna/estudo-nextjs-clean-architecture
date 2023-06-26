@@ -9,26 +9,36 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { GridColDef } from "@mui/x-data-grid";
 import React, { useContext, useEffect, useState } from "react";
 
-type ActionButton = {
+export type NewButtonProps = {
+  title: string;
+  variant: "text" | "outlined" | "contained";
+  color:
+    | "info"
+    | "success"
+    | "warning"
+    | "error"
+    | "primary"
+    | "secondary"
+    | "inherit";
+  onClick: React.FormEventHandler;
+};
+
+export type ActionButtonProps = {
   icon: React.JSX.Element;
   label: string;
   color: string;
   action?: Function | undefined;
 };
 
-type PageProps = {
+export type PageProps = {
   data: any;
   setData: React.Dispatch<any>;
-  headers: Object;
-  actionButtons: ActionButton[];
-  buttonNew: {
-    title: string;
-    variant: string;
-    color: string;
-    onClick: Function;
-  };
+  headers: Array<GridColDef>;
+  actionButtons: ActionButtonProps[];
+  buttonNew: NewButtonProps;
   useCases: IUseCasesMethods;
 };
 

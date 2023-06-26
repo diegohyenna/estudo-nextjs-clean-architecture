@@ -1,18 +1,18 @@
-import PageIndex from "@/src/components/pages";
+import PageIndex, { NewButtonProps } from "@/src/components/pages";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { MotoristsProps } from "@/src/core/domain/entities/motorist";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import { GridValueGetterParams } from "@mui/x-data-grid";
+import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 function Motorists() {
   const [data, setData] = useState<MotoristsProps[]>([]);
 
   const { motoristUseCases } = useContext(GlobalContext);
 
-  const headers = [
+  const headers: Array<GridColDef> = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "nome", headerName: "Nome", minWidth: 180, flex: 1 },
     {
@@ -49,7 +49,7 @@ function Motorists() {
     router.push(`/motorists/create`);
   };
 
-  const buttonNew = {
+  const buttonNew: NewButtonProps = {
     title: "Criar novo motorista",
     variant: "contained",
     color: "primary",

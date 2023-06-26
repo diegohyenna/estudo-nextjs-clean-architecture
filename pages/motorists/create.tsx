@@ -124,7 +124,7 @@ function Create() {
             })}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
             margin="dense"
             id="vencimentoHabilitacao"

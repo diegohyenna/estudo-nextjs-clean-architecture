@@ -1,8 +1,9 @@
-import PageIndex from "@/src/components/pages";
+import PageIndex, { NewButtonProps } from "@/src/components/pages";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { UsersProps } from "@/src/core/domain/entities/user";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
+import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -11,7 +12,7 @@ function Users() {
 
   const { userUseCases } = useContext(GlobalContext);
 
-  const headers = [
+  const headers: Array<GridColDef> = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "nome", headerName: "Nome", flex: 1 },
     {
@@ -61,7 +62,7 @@ function Users() {
     router.push(`/users/create`);
   };
 
-  const buttonNew = {
+  const buttonNew: NewButtonProps = {
     title: "Criar novo usuário",
     variant: "contained",
     color: "primary",

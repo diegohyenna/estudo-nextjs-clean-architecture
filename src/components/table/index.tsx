@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material";
+import { ActionButtonProps, NewButtonProps, PageProps } from "../pages";
 
 const DataGridContainer = styled(DataGrid)`
   @media all and (max-width: 599px) {
@@ -22,12 +23,19 @@ type SnackBarProps = {
   color: "info" | "success" | "warning" | "error";
 };
 
+type TableProps = {
+  data: any;
+  headers: Array<GridColDef>;
+  actionButtons: ActionButtonProps[];
+  buttonNew: NewButtonProps;
+};
+
 export default function Table({
   data,
   headers,
   actionButtons,
   buttonNew,
-}: any) {
+}: TableProps) {
   const [rows, setRows] = useState(data);
   const [snackbar, setSnackbar] = useState<SnackBarProps>({
     open: false,
@@ -81,7 +89,9 @@ export default function Table({
       </Snackbar>
       <Grid>
         <Button
-          {...buttonNew}
+          variant={buttonNew.variant}
+          color={buttonNew.color}
+          onClick={buttonNew.onClick}
           sx={{
             marginBottom: "12px",
           }}

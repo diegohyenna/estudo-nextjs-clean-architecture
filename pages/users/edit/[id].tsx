@@ -99,48 +99,6 @@ function Edit() {
           })}
         />
       </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          margin="dense"
-          id="tipoDocumento"
-          label="Tipo de Documento"
-          type="text"
-          fullWidth
-          title="Informe o tipo do documento"
-          error={errors.tipoDocumento ? true : false}
-          helperText={
-            errors.tipoDocumento ? (errors.tipoDocumento.message as string) : ""
-          }
-          {...register("tipoDocumento", {
-            required: {
-              value: true,
-              message: "Digite o tipo do documento",
-            },
-          })}
-        />
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          margin="dense"
-          id="numeroDocumento"
-          label="Numero do Documento"
-          type="text"
-          fullWidth
-          title="Informe o numero do documento"
-          error={errors.numeroDocumento ? true : false}
-          helperText={
-            errors.numeroDocumento
-              ? (errors.numeroDocumento.message as string)
-              : ""
-          }
-          {...register("numeroDocumento", {
-            required: {
-              value: true,
-              message: "Digite o número do documento",
-            },
-          })}
-        />
-      </Grid>
       <Grid item xs={12} sm={12} md={4}>
         <TextField
           margin="dense"
@@ -197,7 +155,7 @@ function Edit() {
           })}
         />
       </Grid>
-      <Grid item xs={12} sm={12} md={4}>
+      <Grid item xs={12} sm={12} md={6}>
         <TextField
           margin="dense"
           id="cidade"
@@ -215,7 +173,7 @@ function Edit() {
           })}
         />
       </Grid>
-      <Grid item xs={12} sm={12} md={4}>
+      <Grid item xs={12} sm={12} md={6}>
         <TextField
           margin="dense"
           id="uf"

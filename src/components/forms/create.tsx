@@ -3,16 +3,16 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Item from "@mui/material/ListItem";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 type FormProps = {
   useEffects?: {
     action: Function;
     dependencyArray?: Array<any>;
   };
-  onSubmit: any;
+  onSubmit: React.FormEventHandler;
   title: string;
-  children: any;
+  children: React.ReactNode;
   loading: boolean;
   setLoading: React.Dispatch<any>;
 };

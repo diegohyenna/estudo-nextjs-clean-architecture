@@ -1,6 +1,7 @@
-import { Typography, Grid } from "@mui/material";
+import { Typography, Grid, Divider } from "@mui/material";
 
 import { styled } from "@mui/material";
+import Link from "next/link";
 
 const GridContainer = styled(Grid)`
   .Paragraphy {
@@ -19,14 +20,11 @@ export default function Home() {
         <Typography variant="h4">
           Olá, me chamo Diego Guimarães Martins
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" className="Paragraphy">
           Quero compartilhar com vocês alguns pensamentos e decisões sobre o
           desenvolvimento do projeto
         </Typography>
       </Grid>
-      {/* <div>
-            <Link href={"/users"}>Users</Link>
-          </div> */}
 
       <Grid item>
         <Typography variant="h5">Primeiro</Typography>
@@ -66,38 +64,21 @@ export default function Home() {
           </span>
         </Typography>
 
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and&nbsp;API.</p>
-        </a>
+        <Divider sx={{ margin: "24px 0" }} />
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+        <Typography variant="h5">Tecnologias Usadas no Projeto</Typography>
+        <ul>
+          <li>Nextjs</li>
+          <li>Typescript</li>
+          <li>Material UI</li>
+          <li>React Hook Form</li>
+          <li>Axios</li>
+        </ul>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Discover and deploy boilerplate example Next.js&nbsp;projects.</p>
-        </a>
+        <Divider sx={{ margin: "24px 0" }} />
+
+        <Typography variant="h5">Sobre mim</Typography>
+        <Link href="/about">Visite aqui</Link>
       </Grid>
     </GridContainer>
   );

@@ -1,9 +1,9 @@
-import PageIndex from "@/src/components/pages";
+import PageIndex, { NewButtonProps } from "@/src/components/pages";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { DisplacementsProps } from "@/src/core/domain/entities/displacement";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
-import { GridValueGetterParams } from "@mui/x-data-grid";
+import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -12,7 +12,7 @@ function Displacements() {
 
   const { displacementUseCases } = useContext(GlobalContext);
 
-  const headers = [
+  const headers: Array<GridColDef> = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "motivo", headerName: "Motivo", flex: 1 },
     {
@@ -86,7 +86,7 @@ function Displacements() {
     router.push(`/displacements/create`);
   };
 
-  const buttonNew = {
+  const buttonNew: NewButtonProps = {
     title: "Criar novo deslocamento",
     variant: "contained",
     color: "primary",

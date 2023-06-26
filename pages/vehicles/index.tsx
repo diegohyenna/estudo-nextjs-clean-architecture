@@ -1,8 +1,9 @@
-import PageIndex from "@/src/components/pages";
+import PageIndex, { NewButtonProps } from "@/src/components/pages";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { VehiclesProps } from "@/src/core/domain/entities/vehicle";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
+import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -11,7 +12,7 @@ function Vehicles() {
 
   const { vehicleUseCases } = useContext(GlobalContext);
 
-  const headers = [
+  const headers: Array<GridColDef> = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "placa", headerName: "Placa", minWidth: 180, flex: 1 },
     {
@@ -42,7 +43,7 @@ function Vehicles() {
     router.push(`/vehicles/create`);
   };
 
-  const buttonNew = {
+  const buttonNew: NewButtonProps = {
     title: "Criar novo veículo",
     variant: "contained",
     color: "primary",

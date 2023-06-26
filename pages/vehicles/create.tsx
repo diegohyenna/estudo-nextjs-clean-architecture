@@ -62,7 +62,7 @@ function Create() {
             title="Digite a marca ou modelo do veiculo"
             error={errors.marcaModelo ? true : false}
             helperText={
-              errors.marcaModelo ? (errors.marcaModelo.message as string) : "a"
+              errors.marcaModelo ? (errors.marcaModelo.message as string) : ""
             }
             {...register("marcaModelo", {
               required: {
@@ -116,7 +116,7 @@ function Create() {
             })}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
             margin="dense"
             id="kmAtual"
