@@ -20,4 +20,4 @@ Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [c
 
 ## Demonstração
 
-Acesse a demonstração do projeto aqui [Teste Naty Demo](teste-naty-teal.vercel.app)
+Acesse a demonstração do projeto aqui [Teste Naty Demo](https://teste-naty-teal.vercel.app)
