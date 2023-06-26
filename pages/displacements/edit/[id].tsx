@@ -104,7 +104,9 @@ function Edit() {
             onBlurCapture={(e) => onBlur(e.target)}
             error={errors.fimDeslocamento ? true : false}
             helperText={
-              errors.fimDeslocamento ? errors.fimDeslocamento.message : ""
+              errors.fimDeslocamento
+                ? (errors.fimDeslocamento.message as string)
+                : ""
             }
             {...register("fimDeslocamento", {
               required: {
@@ -128,7 +130,9 @@ function Edit() {
             title="Informe a kilometragem inicial"
             // onChange={(e) => onChange(e.target)}
             error={errors.kmFinal ? true : false}
-            helperText={errors.kmFinal ? errors.kmFinal.message : ""}
+            helperText={
+              errors.kmFinal ? (errors.kmFinal.message as string) : ""
+            }
             {...register("kmFinal", {
               required: {
                 value: true,
@@ -145,7 +149,9 @@ function Edit() {
             fullWidth
             title="Informe uma observação"
             error={errors.observacao ? true : false}
-            helperText={errors.observacao ? errors.observacao.message : ""}
+            helperText={
+              errors.observacao ? (errors.observacao.message as string) : ""
+            }
             {...register("observacao", {
               required: { value: true, message: "Digite uma observação!" },
             })}

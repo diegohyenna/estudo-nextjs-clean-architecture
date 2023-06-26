@@ -62,7 +62,7 @@ function Create() {
           title="Informe o nome do usuario"
           // onChange={(e) => onChange(e.target)}
           error={errors.nome ? true : false}
-          helperText={errors.nome ? errors.nome.message : ""}
+          helperText={errors.nome ? (errors.nome.message as string) : ""}
           {...register("nome", {
             required: {
               value: true,
@@ -81,7 +81,9 @@ function Create() {
           title="Informe o tipo do documento"
           // onChange={(e) => onChange(e.target)}
           error={errors.tipoDocumento ? true : false}
-          helperText={errors.tipoDocumento ? errors.tipoDocumento.message : ""}
+          helperText={
+            errors.tipoDocumento ? (errors.tipoDocumento.message as string) : ""
+          }
           {...register("tipoDocumento", {
             required: {
               value: true,
@@ -101,7 +103,9 @@ function Create() {
           // onChange={(e) => onChange(e.target)}
           error={errors.numeroDocumento ? true : false}
           helperText={
-            errors.numeroDocumento ? errors.numeroDocumento.message : ""
+            errors.numeroDocumento
+              ? (errors.numeroDocumento.message as string)
+              : ""
           }
           {...register("numeroDocumento", {
             required: {
@@ -121,7 +125,9 @@ function Create() {
           title="Informe o logradouro do endereço"
           // onChange={(e) => onChange(e.target)}
           error={errors.logradouro ? true : false}
-          helperText={errors.logradouro ? errors.logradouro.message : ""}
+          helperText={
+            errors.logradouro ? (errors.logradouro.message as string) : ""
+          }
           {...register("logradouro", {
             required: {
               value: true,
@@ -140,7 +146,7 @@ function Create() {
           title="Informe o numero do endereço"
           // onChange={(e) => onChange(e.target)}
           error={errors.numero ? true : false}
-          helperText={errors.numero ? errors.numero.message : ""}
+          helperText={errors.numero ? (errors.numero.message as string) : ""}
           {...register("numero", {
             required: {
               value: true,
@@ -159,7 +165,7 @@ function Create() {
           title="Informe o bairro do endereço"
           // onChange={(e) => onChange(e.target)}
           error={errors.bairro ? true : false}
-          helperText={errors.bairro ? errors.bairro.message : ""}
+          helperText={errors.bairro ? (errors.bairro.message as string) : ""}
           {...register("bairro", {
             required: {
               value: true,
@@ -178,7 +184,7 @@ function Create() {
           title="Informe a cidade do endereço"
           // onChange={(e) => onChange(e.target)}
           error={errors.cidade ? true : false}
-          helperText={errors.cidade ? errors.cidade.message : ""}
+          helperText={errors.cidade ? (errors.cidade.message as string) : ""}
           {...register("cidade", {
             required: {
               value: true,
@@ -197,7 +203,7 @@ function Create() {
           title="Informe o estado do endereço"
           // onChange={(e) => onChange(e.target)}
           error={errors.uf ? true : false}
-          helperText={errors.uf ? errors.uf.message : ""}
+          helperText={errors.uf ? (errors.uf.message as string) : ""}
           {...register("uf", {
             required: {
               value: true,

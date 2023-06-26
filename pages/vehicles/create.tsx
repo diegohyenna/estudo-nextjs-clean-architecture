@@ -61,7 +61,9 @@ function Create() {
             fullWidth
             title="Digite a marca ou modelo do veiculo"
             error={errors.marcaModelo ? true : false}
-            helperText={errors.marcaModelo ? errors.marcaModelo.message : ""}
+            helperText={
+              errors.marcaModelo ? (errors.marcaModelo.message as string) : "a"
+            }
             {...register("marcaModelo", {
               required: {
                 value: true,
@@ -79,7 +81,7 @@ function Create() {
             fullWidth
             title="Digite a placa do veiculo"
             error={errors.placa ? true : false}
-            helperText={errors.placa ? errors.placa.message : ""}
+            helperText={errors.placa ? (errors.placa.message as string) : ""}
             {...register("placa", {
               required: {
                 value: true,
@@ -98,7 +100,9 @@ function Create() {
             title="Informe o ano de fabricação do veiculo"
             error={errors.anoFabricacao ? true : false}
             helperText={
-              errors.anoFabricacao ? errors.anoFabricacao.message : ""
+              errors.anoFabricacao
+                ? (errors.anoFabricacao.message as string)
+                : ""
             }
             {...register("anoFabricacao", {
               required: {
@@ -121,7 +125,9 @@ function Create() {
             fullWidth
             title="Informe a kilometragem do veiculo"
             error={errors.kmAtual ? true : false}
-            helperText={errors.kmAtual ? errors.kmAtual.message : ""}
+            helperText={
+              errors.kmAtual ? (errors.kmAtual.message as string) : ""
+            }
             {...register("kmAtual", {
               required: {
                 value: true,

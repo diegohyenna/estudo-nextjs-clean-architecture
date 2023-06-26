@@ -71,7 +71,7 @@ function Create() {
             fullWidth
             title="Digite o nome do motorista"
             error={errors.nome ? true : false}
-            helperText={errors.nome ? errors.nome.message : ""}
+            helperText={errors.nome ? (errors.nome.message as string) : ""}
             {...register("nome", {
               required: {
                 value: true,
@@ -91,7 +91,7 @@ function Create() {
             error={errors.categoriaHabilitacao ? true : false}
             helperText={
               errors.categoriaHabilitacao
-                ? errors.categoriaHabilitacao.message
+                ? (errors.categoriaHabilitacao.message as string)
                 : ""
             }
             {...register("categoriaHabilitacao", {
@@ -112,7 +112,9 @@ function Create() {
             title="Informe o número da habilitação"
             error={errors.numeroHabilitacao ? true : false}
             helperText={
-              errors.numeroHabilitacao ? errors.numeroHabilitacao.message : ""
+              errors.numeroHabilitacao
+                ? (errors.numeroHabilitacao.message as string)
+                : ""
             }
             {...register("numeroHabilitacao", {
               required: {
@@ -135,7 +137,7 @@ function Create() {
             error={errors.vencimentoHabilitacao ? true : false}
             helperText={
               errors.vencimentoHabilitacao
-                ? errors.vencimentoHabilitacao.message
+                ? (errors.vencimentoHabilitacao.message as string)
                 : ""
             }
             {...register("vencimentoHabilitacao", {

@@ -43,9 +43,9 @@ export default function Home() {
           candidatos na vaga. Então resolvi aplicar conceitos de uma arquitetura
           de software. Resolvi{" "}
           <span className="Span">separar a regra de negocio da aplicação</span>.
-          Para isso implementei uma versão da "personalizada" (o que eu pude
-          entender) da <span className="Span">Clean Architecture</span>, baseado
-          em um rápido estudo.
+          Para isso implementei uma versão da &quot;personalizada&quot; (o que
+          eu pude entender) da <span className="Span">Clean Architecture</span>,
+          baseado em um rápido estudo.
         </Typography>
 
         <Typography variant="h5">Segundo</Typography>

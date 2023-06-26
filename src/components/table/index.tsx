@@ -16,6 +16,12 @@ const DataGridContainer = styled(DataGrid)`
   }
 `;
 
+type SnackBarProps = {
+  open: boolean;
+  message: string;
+  color: "info" | "success" | "warning" | "error";
+};
+
 export default function Table({
   data,
   headers,
@@ -23,14 +29,14 @@ export default function Table({
   buttonNew,
 }: any) {
   const [rows, setRows] = useState(data);
-  const [snackbar, setSnackbar] = useState({
+  const [snackbar, setSnackbar] = useState<SnackBarProps>({
     open: false,
     message: "",
     color: "info",
   });
 
   const handleCloseSnackbar = () => {
-    setSnackbar({ open: false, message: "", color: "" });
+    setSnackbar({ open: false, message: "", color: "info" });
   };
 
   const columns: GridColDef[] = [

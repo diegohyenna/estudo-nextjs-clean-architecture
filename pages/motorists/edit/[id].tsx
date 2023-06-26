@@ -111,7 +111,7 @@ function Edit() {
             error={errors.categoriaHabilitacao ? true : false}
             helperText={
               errors.categoriaHabilitacao
-                ? errors.categoriaHabilitacao.message
+                ? (errors.categoriaHabilitacao.message as string)
                 : ""
             }
             {...register("categoriaHabilitacao", {
@@ -135,7 +135,7 @@ function Edit() {
             error={errors.vencimentoHabilitacao ? true : false}
             helperText={
               errors.vencimentoHabilitacao
-                ? errors.vencimentoHabilitacao.message
+                ? (errors.vencimentoHabilitacao.message as string)
                 : ""
             }
             {...register("vencimentoHabilitacao", {

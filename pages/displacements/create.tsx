@@ -127,7 +127,6 @@ function Create() {
             label="Selecione o Motorista"
             select
             fullWidth
-            // onChangeCapture={(e) => onChangeSelect(e.target)}
             error={errors.idCondutor ? true : false}
             helperText={errors.idCondutor && "Selecione um motorista"}
             {...register("idCondutor", { required: true })}
@@ -146,7 +145,6 @@ function Create() {
             label="Selecione o Veículo"
             select
             fullWidth
-            // onChangeCapture={(e) => onChangeSelect(e.target)}
             error={errors.idVeiculo ? true : false}
             helperText={errors.idVeiculo && "Selecione um veículo"}
             {...register("idVeiculo", { required: true })}
@@ -172,7 +170,9 @@ function Create() {
             onBlurCapture={(e) => onBlur(e.target)}
             error={errors.inicioDeslocamento ? true : false}
             helperText={
-              errors.inicioDeslocamento ? errors.inicioDeslocamento.message : ""
+              errors.inicioDeslocamento
+                ? (errors.inicioDeslocamento.message as string)
+                : ""
             }
             {...register("inicioDeslocamento", {
               required: {
@@ -196,7 +196,9 @@ function Create() {
             title="Informe a kilometragem inicial"
             // onChange={(e) => onChange(e.target)}
             error={errors.kmInicial ? true : false}
-            helperText={errors.kmInicial ? errors.kmInicial.message : ""}
+            helperText={
+              errors.kmInicial ? (errors.kmInicial.message as string) : ""
+            }
             {...register("kmInicial", {
               required: {
                 value: true,
@@ -216,7 +218,9 @@ function Create() {
             title="Informe um checklist"
             // onChange={(e) => onChange(e.target)}
             error={errors.checkList ? true : false}
-            helperText={errors.checkList ? errors.checkList.message : ""}
+            helperText={
+              errors.checkList ? (errors.checkList.message as string) : ""
+            }
             {...register("checkList", {
               required: { value: true, message: "Digite um checklist!" },
             })}
@@ -231,7 +235,7 @@ function Create() {
             fullWidth
             title="Informe um motivo"
             error={errors.motivo ? true : false}
-            helperText={errors.motivo ? errors.motivo.message : ""}
+            helperText={errors.motivo ? (errors.motivo.message as string) : ""}
             {...register("motivo", {
               required: { value: true, message: "Digite um motivo!" },
             })}
@@ -245,7 +249,9 @@ function Create() {
             fullWidth
             title="Informe uma observação"
             error={errors.observacao ? true : false}
-            helperText={errors.observacao ? errors.observacao.message : ""}
+            helperText={
+              errors.observacao ? (errors.observacao.message as string) : ""
+            }
             {...register("observacao", {
               required: { value: true, message: "Digite uma observação!" },
             })}
