@@ -1,6 +1,7 @@
-import { ReactNode, useContext } from "react";
-import { Alert, Snackbar } from "@mui/material";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
+import { Alert, Snackbar } from "@mui/material";
+import { ReactNode, useContext } from "react";
+
 import ResponsiveDrawer from "../components/drawer";
 
 export default function Layout({ ...props }: any) {
