@@ -1,6 +1,6 @@
 # Teste Secretária Naty
 
-Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [create-next-app](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Start local
 
