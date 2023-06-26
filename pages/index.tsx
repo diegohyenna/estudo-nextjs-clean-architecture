@@ -1,4 +1,4 @@
-import { Typography, Grid, Divider } from "@mui/material";
+import { Typography, Grid, Divider, Button } from "@mui/material";
 
 import { styled } from "@mui/material";
 import Link from "next/link";
@@ -66,6 +66,18 @@ export default function Home() {
 
         <Divider sx={{ margin: "24px 0" }} />
 
+        <Typography variant="h5">Repositorio do Projeto</Typography>
+        <Button
+          href="/https://github.com/diegohyenna/teste-naty"
+          target="_blank"
+          LinkComponent={Link}
+          variant="outlined"
+        >
+          Visite aqui
+        </Button>
+
+        <Divider sx={{ margin: "24px 0" }} />
+
         <Typography variant="h5">Tecnologias Usadas no Projeto</Typography>
         <ul>
           <li>Nextjs</li>
@@ -78,7 +90,9 @@ export default function Home() {
         <Divider sx={{ margin: "24px 0" }} />
 
         <Typography variant="h5">Sobre mim</Typography>
-        <Link href="/about">Visite aqui</Link>
+        <Button href="/about" LinkComponent={Link} variant="outlined">
+          Visite aqui
+        </Button>
       </Grid>
     </GridContainer>
   );
