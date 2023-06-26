@@ -1,39 +1,16 @@
-import Table from "@/src/components/table";
+import PageIndex from "@/src/components/pages";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { DeleteDisplacementUseCase } from "@/src/core/application/displacement/delete-displacement.use-case";
-import { ListDisplacementUseCase } from "@/src/core/application/displacement/list-displacement.use-case";
 import { DisplacementsProps } from "@/src/core/domain/entities/displacement";
-import { DisplacementHttpGateway } from "@/src/core/infra/gateways/displacement-http.gateway";
-import http, { StatusReturn } from "@/src/core/infra/http";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
-import { CircularProgress, ListItem } from "@mui/material";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import { GridValueGetterParams } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
 function Displacements() {
-  const gateway = new DisplacementHttpGateway(http);
-  const useCaseList = new ListDisplacementUseCase(gateway);
-  const useCaseDelete = new DeleteDisplacementUseCase(gateway);
-
-  const [loading, setLoading] = useState(true);
-
   const [data, setData] = useState<DisplacementsProps[]>([]);
 
-  const router = useRouter();
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const { handleOpenAlert }: any = useContext(GlobalContext);
-
-  const [id, setId] = useState(0);
+  const { displacementUseCases } = useContext(GlobalContext);
 
   const headers = [
     { field: "id", headerName: "ID", flex: 1 },
@@ -80,29 +57,26 @@ function Displacements() {
       field: "idCliente",
       headerName: "Usuário",
       flex: 1,
-      // valueGetter: (params: GridValueGetterParams) =>
-      //   new Date(params.row.vencimentoHabilitacao).toLocaleDateString("pt-BR"),
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.user ? params.row.user.nome : "",
     },
     {
       field: "idCondutor",
       headerName: "Motorista",
       flex: 1,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.motorist ? params.row.motorist.nome : "",
     },
     {
       field: "idVeiculo",
       headerName: "Veículo",
       flex: 1,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.vehicle ? params.row.vehicle.marcaModelo : "",
     },
   ];
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  const handleOpenDialog = (id: number) => () => {
-    setId(id);
-    setOpenDialog(true);
-  };
+  const router = useRouter();
 
   const onEdit = (id: number) => () => {
     router.push(`/displacements/edit/${id}`);
@@ -110,6 +84,13 @@ function Displacements() {
 
   const onCreate = () => {
     router.push(`/displacements/create`);
+  };
+
+  const buttonNew = {
+    title: "Criar novo deslocamento",
+    variant: "contained",
+    color: "primary",
+    onClick: onCreate,
   };
 
   const actionButtons = [
@@ -122,88 +103,19 @@ function Displacements() {
     {
       icon: <DeleteIcon />,
       label: "deletar",
-      action: handleOpenDialog,
       color: "error",
     },
   ];
 
-  const handleSubmitDialog = () => {
-    useCaseDelete
-      .execute(id)
-      .then((res) => {
-        setData(data.filter((dt: any) => dt.id !== id));
-        handleOpenAlert({
-          open: true,
-          message: res?.message || "Sucesso!",
-          status: "success",
-        });
-      })
-      .catch((res) => {
-        handleOpenAlert({
-          open: true,
-          message: res?.message || "Houve algum erro",
-          status: "error",
-        });
-      });
-    setOpenDialog(false);
-  };
-
-  useEffect(() => {
-    useCaseList
-      .execute()
-      .then((res) => {
-        setData(res.map((data) => data.toJSON()));
-        setLoading(false);
-      })
-      .catch((res: StatusReturn) => {
-        setData([]);
-        setLoading(false);
-        handleOpenAlert({ open: true, status: "error", message: res.message });
-      });
-  }, []);
-
   return (
-    <>
-      {loading && (
-        <ListItem>
-          <CircularProgress />
-        </ListItem>
-      )}
-      {!loading && (
-        <Table
-          data={data}
-          headers={headers}
-          actionButtons={actionButtons}
-          buttonNew={{
-            title: "Criar novo deslocamento",
-            variant: "contained",
-            color: "primary",
-            onClick: onCreate,
-          }}
-        />
-      )}
-
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Deletar registro!</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Tem certeza que deseja deletar esse registro?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleSubmitDialog}
-          >
-            Sim
-          </Button>
-          <Button variant="contained" onClick={handleCloseDialog}>
-            Não
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <PageIndex
+      data={data}
+      setData={setData}
+      headers={headers}
+      useCases={displacementUseCases}
+      buttonNew={buttonNew}
+      actionButtons={actionButtons}
+    ></PageIndex>
   );
 }
 

@@ -1,39 +1,50 @@
-import React, { useState, useEffect } from "react";
+import { CircularProgress, Divider, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Item from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+
+type FormProps = {
+  useEffects?: {
+    action: Function;
+    dependencyArray?: Array<any>;
+  };
+  onSubmit: any;
+  title: string;
+  children: any;
+  loading: boolean;
+  setLoading: React.Dispatch<any>;
+};
 
 function FormCreate({
+  useEffects,
+  onSubmit,
   title,
-  id,
-  handleSubmitPromise,
-  getByIdPromise,
   children,
-}: any) {
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    handleSubmitPromise()
-      .then(() => {
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  };
+  loading = false,
+  setLoading,
+}: FormProps) {
+  const router = useRouter();
 
   useEffect(() => {
-    if (id && getByIdPromise) {
-      setLoading(true);
-      getByIdPromise(id)
+    if (!useEffects) setLoading(false);
+
+    let dependencyArrayValidation = useEffects?.dependencyArray
+      ? useEffects.dependencyArray?.map((items) => items != 0)
+      : [];
+
+    if (
+      useEffects?.action &&
+      useEffects?.dependencyArray?.length &&
+      !dependencyArrayValidation?.includes(false)
+    ) {
+      useEffects
+        ?.action()
         .then(() => setLoading(false))
         .catch(() => setLoading(false));
     }
-  }, [id]);
+  }, [useEffects?.dependencyArray]);
 
   return (
     <form onSubmit={onSubmit}>
@@ -50,6 +61,27 @@ function FormCreate({
         </Grid>
 
         {!loading && <>{children}</>}
+
+        <Grid container item spacing={1} xs={12}>
+          <Grid item>
+            <Item>
+              <Button type="submit" variant="contained" color="success">
+                Salvar
+              </Button>
+            </Item>
+          </Grid>
+          <Grid item>
+            <Item>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => router.back()}
+              >
+                Voltar
+              </Button>
+            </Item>
+          </Grid>
+        </Grid>
       </Grid>
     </form>
   );

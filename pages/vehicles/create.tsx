@@ -1,150 +1,136 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateVehicleUseCase } from "@/src/core/application/vehicle/create-vehicle.use-case";
-import { Vehicle, VehiclesProps } from "@/src/core/domain/entities/vehicle";
-import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
-import http from "@/src/core/infra/http";
-import Button from "@mui/material/Button";
+import { Vehicle } from "@/src/core/domain/entities/vehicle";
 import Grid from "@mui/material/Grid";
-import Item from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 
 function Create() {
   const router = useRouter();
 
-  const { handleOpenAlert } = useContext(GlobalContext);
+  const { handleOpenAlert, vehicleUseCases } = useContext(GlobalContext);
 
-  const [vehicle, setVehicle] = useState<VehiclesProps>({
-    placa: "",
-    anoFabricacao: 0,
-    kmAtual: 0,
-    marcaModelo: "",
-  });
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmitPromise = () => {
-    return new Promise((resolve, reject) => {
-      const gateway = new VehicleHttpGateway(http);
-      const useCase = new CreateVehicleUseCase(gateway);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-      const data = new Vehicle(vehicle);
-
-      return useCase
-        .execute(data)
-        .then((res) => {
-          router.push("/vehicles").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Sucesso!",
-              status: "success",
-            });
-            return resolve(true);
-          });
-        })
-        .catch((res) => {
-          router.push("/vehicles").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Houve algum erro",
-              status: "error",
-            });
-            return reject();
+  const onSubmit = (data: any) => {
+    const obj = new Vehicle(data);
+    return vehicleUseCases.useCaseCreate
+      .execute(obj)
+      .then((res) => {
+        router.push("/vehicles").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Sucesso!",
+            status: "success",
           });
         });
-    });
-  };
-
-  const onChange = (e: any) => {
-    setVehicle({ ...vehicle, [e.id]: e.value });
+      })
+      .catch((res) => {
+        router.push("/vehicles").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Houve algum erro",
+            status: "error",
+          });
+        });
+      });
   };
 
   return (
     <FormCreate
       title="Criar um novo veículo"
-      handleSubmitPromise={handleSubmitPromise}
+      onSubmit={handleSubmit(onSubmit)}
+      loading={loading}
+      setLoading={setLoading}
     >
-      <Grid item xs={12} sm={12} md={12}>
-        <Item>
+      <>
+        <Grid item xs={12} sm={12} md={12}>
           <TextField
-            required
             margin="dense"
             id="marcaModelo"
             label="Marca/Modelo"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.marcaModelo}
             title="Digite a marca ou modelo do veiculo"
+            error={errors.marcaModelo ? true : false}
+            helperText={errors.marcaModelo ? errors.marcaModelo.message : ""}
+            {...register("marcaModelo", {
+              required: {
+                value: true,
+                message: "Digite a marca ou modelo do veiculo",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
-            required
             margin="dense"
             id="placa"
-            label="Placa"
+            label="Marca/Modelo"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.placa}
             title="Digite a placa do veiculo"
+            error={errors.placa ? true : false}
+            helperText={errors.placa ? errors.placa.message : ""}
+            {...register("placa", {
+              required: {
+                value: true,
+                message: "Digite a placa do veiculo",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
-            required
             margin="dense"
             id="anoFabricacao"
             label="Ano de fabricação"
-            type="number"
+            type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.anoFabricacao}
             title="Informe o ano de fabricação do veiculo"
+            error={errors.anoFabricacao ? true : false}
+            helperText={
+              errors.anoFabricacao ? errors.anoFabricacao.message : ""
+            }
+            {...register("anoFabricacao", {
+              required: {
+                value: true,
+                message: "Informe o ano de fabricação do veiculo",
+              },
+              pattern: {
+                value: /^\d{4}$/,
+                message: "Digite um ano válido!",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={4}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
           <TextField
-            required
             margin="dense"
             id="kmAtual"
             label="Kilometragem"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.kmAtual}
             title="Informe a kilometragem do veiculo"
+            error={errors.kmAtual ? true : false}
+            helperText={errors.kmAtual ? errors.kmAtual.message : ""}
+            {...register("kmAtual", {
+              required: {
+                value: true,
+                message: "Informe a kilometragem do veiculo",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-
-      <Grid container item spacing={1} xs={12}>
-        <Grid item>
-          <Item>
-            <Button type="submit" variant="contained" color="success">
-              Salvar
-            </Button>
-          </Item>
         </Grid>
-        <Grid item>
-          <Item>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => router.back()}
-            >
-              Voltar
-            </Button>
-          </Item>
-        </Grid>
-      </Grid>
+      </>
     </FormCreate>
   );
 }

@@ -3,6 +3,18 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material";
+
+const DataGridContainer = styled(DataGrid)`
+  @media all and (max-width: 599px) {
+    display: inline-grid !important;
+
+    .MuiDataGrid-columnHeader {
+      width: 100% !important;
+      max-width: unset !important;
+    }
+  }
+`;
 
 export default function Table({
   data,
@@ -72,7 +84,7 @@ export default function Table({
         </Button>
       </Grid>
       <Grid>
-        <DataGrid
+        <DataGridContainer
           autoHeight
           rows={rows}
           columns={columns}

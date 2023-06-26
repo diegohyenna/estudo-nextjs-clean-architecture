@@ -1,40 +1,15 @@
-import Table from "@/src/components/table";
+import PageIndex from "@/src/components/pages";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
+import { UsersProps } from "@/src/core/domain/entities/user";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import http, { StatusReturn } from "@/src/core/infra/http";
-
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useContext } from "react";
-import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
-import { ListUserUseCase } from "@/src/core/application/user/list-user.use-case";
-import { DeleteUserUseCase } from "@/src/core/application/user/delete-user.use-case";
-import { User, UsersProps } from "@/src/core/domain/entities/user";
-import { CircularProgress, ListItem } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 
 function Users() {
-  const gateway = new UserHttpGateway(http);
-  const useCaseList = new ListUserUseCase(gateway);
-  const useCaseDelete = new DeleteUserUseCase(gateway);
-
-  const [loading, setLoading] = useState(true);
-
   const [data, setData] = useState<UsersProps[]>([]);
 
-  const router = useRouter();
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const { handleOpenAlert }: any = useContext(GlobalContext);
-
-  const [id, setId] = useState(0);
+  const { userUseCases } = useContext(GlobalContext);
 
   const headers = [
     { field: "id", headerName: "ID", flex: 1 },
@@ -76,14 +51,7 @@ function Users() {
     },
   ];
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  const handleOpenDialog = (id: number) => () => {
-    setId(id);
-    setOpenDialog(true);
-  };
+  const router = useRouter();
 
   const onEdit = (id: number) => () => {
     router.push(`/users/edit/${id}`);
@@ -91,6 +59,13 @@ function Users() {
 
   const onCreate = () => {
     router.push(`/users/create`);
+  };
+
+  const buttonNew = {
+    title: "Criar novo usuário",
+    variant: "contained",
+    color: "primary",
+    onClick: onCreate,
   };
 
   const actionButtons = [
@@ -103,88 +78,19 @@ function Users() {
     {
       icon: <DeleteIcon />,
       label: "deletar",
-      action: handleOpenDialog,
       color: "error",
     },
   ];
 
-  const handleSubmitDialog = () => {
-    useCaseDelete
-      .execute(id)
-      .then((res) => {
-        setData(data.filter((dt: any) => dt.id !== id));
-        handleOpenAlert({
-          open: true,
-          message: res?.message || "Sucesso!",
-          status: "success",
-        });
-      })
-      .catch((res) => {
-        handleOpenAlert({
-          open: true,
-          message: res?.message || "Houve algum erro",
-          status: "error",
-        });
-      });
-    setOpenDialog(false);
-  };
-
-  useEffect(() => {
-    useCaseList
-      .execute()
-      .then((res) => {
-        setData(res.map((data) => data.toJSON()));
-        setLoading(false);
-      })
-      .catch((res: StatusReturn) => {
-        setData([]);
-        setLoading(false);
-        handleOpenAlert({ open: true, status: "error", message: res.message });
-      });
-  }, []);
-
   return (
-    <>
-      {loading && (
-        <ListItem>
-          <CircularProgress />
-        </ListItem>
-      )}
-      {!loading && (
-        <Table
-          data={data}
-          headers={headers}
-          actionButtons={actionButtons}
-          buttonNew={{
-            title: "Criar novo usuario",
-            variant: "contained",
-            color: "primary",
-            onClick: onCreate,
-          }}
-        />
-      )}
-
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Deletar registro!</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Tem certeza que deseja deletar esse registro?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleSubmitDialog}
-          >
-            Sim
-          </Button>
-          <Button variant="contained" onClick={handleCloseDialog}>
-            Não
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <PageIndex
+      data={data}
+      setData={setData}
+      headers={headers}
+      useCases={userUseCases}
+      buttonNew={buttonNew}
+      actionButtons={actionButtons}
+    ></PageIndex>
   );
 }
 

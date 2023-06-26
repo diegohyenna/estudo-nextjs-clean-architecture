@@ -16,10 +16,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 
 export default function ResponsiveDrawer(props: any) {
+  const router = useRouter();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -41,16 +43,18 @@ export default function ResponsiveDrawer(props: any) {
       <Toolbar />
       <Divider />
       <List>
-        {routes.map((route, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton href={route.href} LinkComponent={Link}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={route.title} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {routes
+          .filter((route) => route.href != "/about")
+          .map((route, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton href={route.href} LinkComponent={Link}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={route.title} />
+              </ListItemButton>
+            </ListItem>
+          ))}
       </List>
       <Divider />
       <List>
@@ -94,7 +98,7 @@ export default function ResponsiveDrawer(props: any) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            {routes.find((route) => route.href == router.route)?.title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -103,14 +107,13 @@ export default function ResponsiveDrawer(props: any) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },

@@ -1,62 +1,47 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { CreateMotoristUseCase } from "@/src/core/application/motorist/create-motorist.use-case";
-import { Motorist, MotoristsProps } from "@/src/core/domain/entities/motorist";
-import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";
-import http from "@/src/core/infra/http";
-import Button from "@mui/material/Button";
+import { Motorist } from "@/src/core/domain/entities/motorist";
 import Grid from "@mui/material/Grid";
-import Item from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 
 function Create() {
   const router = useRouter();
 
-  const { handleOpenAlert } = useContext(GlobalContext);
+  const { handleOpenAlert, motoristUseCases } = useContext(GlobalContext);
 
-  const [motorist, setMotorist] = useState<MotoristsProps>({
-    categoriaHabilitacao: "",
-    nome: "",
-    numeroHabilitacao: "",
-    vencimentoHabilitacao: "",
-  });
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmitPromise = () => {
-    return new Promise((resolve, reject) => {
-      const gateway = new MotoristHttpGateway(http);
-      const useCase = new CreateMotoristUseCase(gateway);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-      const data = new Motorist(motorist);
-
-      return useCase
-        .execute(data)
-        .then((res) => {
-          router.push("/motorists").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Sucesso!",
-              status: "success",
-            });
-            return resolve(true);
-          });
-        })
-        .catch((res) => {
-          router.push("/motorists").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Houve algum erro",
-              status: "error",
-            });
-            return reject();
+  const onSubmit = (data: any) => {
+    const obj = new Motorist(data);
+    return motoristUseCases.useCaseCreate
+      .execute(obj)
+      .then((res) => {
+        router.push("/motorists").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Sucesso!",
+            status: "success",
           });
         });
-    });
-  };
-
-  const onChange = (e: any) => {
-    setMotorist({ ...motorist, [e.id]: e.value });
+      })
+      .catch((res) => {
+        router.push("/motorists").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Houve algum erro",
+            status: "error",
+          });
+        });
+      });
   };
 
   const onFocus = (e: any) => {
@@ -72,92 +57,100 @@ function Create() {
   return (
     <FormCreate
       title="Criar um novo motorista"
-      handleSubmitPromise={handleSubmitPromise}
+      onSubmit={handleSubmit(onSubmit)}
+      loading={loading}
+      setLoading={setLoading}
     >
-      <Grid item xs={12} sm={12} md={12}>
-        <Item>
+      <>
+        <Grid item xs={12} sm={12} md={12}>
           <TextField
-            required
             margin="dense"
             id="nome"
             label="Nome"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={motorist.nome}
             title="Digite o nome do motorista"
+            error={errors.nome ? true : false}
+            helperText={errors.nome ? errors.nome.message : ""}
+            {...register("nome", {
+              required: {
+                value: true,
+                message: "Digite o nome do motorista",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
-            required
             margin="dense"
             id="categoriaHabilitacao"
             label="Categoria da habilitação"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={motorist.categoriaHabilitacao}
             title="Digite a categoria da habilitação"
+            error={errors.categoriaHabilitacao ? true : false}
+            helperText={
+              errors.categoriaHabilitacao
+                ? errors.categoriaHabilitacao.message
+                : ""
+            }
+            {...register("categoriaHabilitacao", {
+              required: {
+                value: true,
+                message: "Digite a categoria da habilitação",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
-            required
             margin="dense"
             id="numeroHabilitacao"
             label="Nº da Habilitação"
             type="number"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={motorist.numeroHabilitacao}
             title="Informe o número da habilitação"
+            error={errors.numeroHabilitacao ? true : false}
+            helperText={
+              errors.numeroHabilitacao ? errors.numeroHabilitacao.message : ""
+            }
+            {...register("numeroHabilitacao", {
+              required: {
+                value: true,
+                message: "Digite o número da habilitação",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={4}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
           <TextField
-            required
             margin="dense"
             id="vencimentoHabilitacao"
-            label="Vencimento habilitação"
+            label="Vencimento da habilitação"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={motorist.vencimentoHabilitacao}
             title="Informe o vencimento da habilitação"
-            placeholder=""
             onFocus={(e) => onFocus(e.target)}
-            onBlur={(e) => onBlur(e.target)}
+            onBlurCapture={(e) => onBlur(e.target)}
+            error={errors.vencimentoHabilitacao ? true : false}
+            helperText={
+              errors.vencimentoHabilitacao
+                ? errors.vencimentoHabilitacao.message
+                : ""
+            }
+            {...register("vencimentoHabilitacao", {
+              required: {
+                value: true,
+                message: "Digite uma data",
+              },
+              pattern: {
+                value: /^\d{4}-\d{2}-\d{2}$/,
+                message: "Digite uma data válida",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-
-      <Grid container item spacing={1} xs={12}>
-        <Grid item>
-          <Item>
-            <Button type="submit" variant="contained" color="success">
-              Salvar
-            </Button>
-          </Item>
         </Grid>
-        <Grid item>
-          <Item>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => router.back()}
-            >
-              Voltar
-            </Button>
-          </Item>
-        </Grid>
-      </Grid>
+      </>
     </FormCreate>
   );
 }
