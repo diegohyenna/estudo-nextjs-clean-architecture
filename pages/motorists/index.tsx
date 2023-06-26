@@ -13,22 +13,27 @@ function Motorists() {
   const { motoristUseCases } = useContext(GlobalContext);
 
   const headers: Array<GridColDef> = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "nome", headerName: "Nome", minWidth: 180, flex: 1 },
+    { field: "id", headerName: "ID", minWidth: 80, width: 100, flex: 1 },
+    { field: "nome", headerName: "Nome", minWidth: 140, width: 100, flex: 1 },
     {
       field: "numeroHabilitacao",
       headerName: "Nº Habilitação",
-      minWidth: 180,
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "catergoriaHabilitacao",
       headerName: "Categoria",
+      minWidth: 140,
+      width: 80,
       flex: 1,
     },
     {
       field: "vencimentoHabilitacao",
       headerName: "Vencimento",
+      minWidth: 140,
+      width: 100,
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.vencimentoHabilitacao

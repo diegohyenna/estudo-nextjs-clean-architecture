@@ -13,41 +13,61 @@ function Users() {
   const { userUseCases } = useContext(GlobalContext);
 
   const headers: Array<GridColDef> = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "nome", headerName: "Nome", flex: 1 },
+    { field: "id", headerName: "ID", minWidth: 80, width: 100, flex: 1 },
+    {
+      field: "nome",
+      headerName: "Nome",
+      minWidth: 140,
+      width: 100,
+      flex: 1,
+    },
     {
       field: "numeroDocumento",
       headerName: "Nº Doc",
+      minWidth: 120,
+      width: 100,
       flex: 1,
     },
     {
       field: "tipoDocumento",
       headerName: "Tipo Doc",
+      minWidth: 120,
+      width: 100,
       flex: 1,
     },
     {
       field: "logradouro",
       headerName: "Logradouro",
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "numero",
       headerName: "Número",
+      minWidth: 140,
+      width: 80,
       flex: 1,
     },
     {
       field: "bairro",
       headerName: "Bairro",
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "cidade",
       headerName: "Cidade",
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "uf",
       headerName: "Estado",
+      minWidth: 140,
+      width: 80,
       flex: 1,
     },
   ];

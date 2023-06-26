@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 function Vehicles() {
   const [data, setData] = useState<VehiclesProps[]>([]);
@@ -13,22 +13,27 @@ function Vehicles() {
   const { vehicleUseCases } = useContext(GlobalContext);
 
   const headers: Array<GridColDef> = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "placa", headerName: "Placa", minWidth: 180, flex: 1 },
+    { field: "id", headerName: "ID", minWidth: 80, width: 100, flex: 1 },
+    { field: "placa", headerName: "Placa", minWidth: 100, width: 100, flex: 1 },
     {
       field: "marcaModelo",
       headerName: "Marca/Modelo",
-      minWidth: 180,
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "anoFabricacao",
       headerName: "Ano",
+      minWidth: 80,
+      width: 100,
       flex: 1,
     },
     {
       field: "kmAtual",
       headerName: "Kilometragem",
+      minWidth: 100,
+      width: 100,
       flex: 1,
     },
   ];

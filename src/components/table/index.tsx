@@ -10,20 +10,20 @@ const DataGridContainer = styled(DataGrid)`
   @media all and (max-width: 599px) {
     display: inline-grid !important;
 
-    .MuiDataGrid-columnHeader {
-      width: 100% !important;
-      max-width: unset !important;
+    .MuiDataGrid-columnHeaderTitleContainerContent {
+      overflow: unset;
     }
 
-    /* .MuiDataGrid-cell {
-      width: 100% !important;
-      max-width: unset !important;
-      min-width: unset !important;
-    } */
+    * > .MuiDataGrid-cell {
+      overflow: unset;
+    }
 
-    /* .MuiDataGrid-row {
-      width: auto;
-    } */
+    .MuiDataGrid-cellContent {
+      overflow: unset;
+    }
+
+    .MuiDataGrid-columnHeader {
+    }
   }
 `;
 

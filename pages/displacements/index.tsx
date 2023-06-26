@@ -13,21 +13,33 @@ function Displacements() {
   const { displacementUseCases } = useContext(GlobalContext);
 
   const headers: Array<GridColDef> = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "motivo", headerName: "Motivo", flex: 1 },
+    { field: "id", headerName: "ID", minWidth: 80, width: 100, flex: 1 },
+    {
+      field: "motivo",
+      headerName: "Motivo",
+      minWidth: 140,
+      width: 100,
+      flex: 1,
+    },
     {
       field: "kmInicial",
       headerName: "Km Inicial",
+      minWidth: 100,
+      width: 100,
       flex: 1,
     },
     {
       field: "kmFinal",
       headerName: "Km Final",
+      minWidth: 100,
+      width: 100,
       flex: 1,
     },
     {
       field: "inicioDeslocamento",
       headerName: "Início",
+      minWidth: 140,
+      width: 100,
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.inicioDeslocamento
@@ -37,6 +49,8 @@ function Displacements() {
     {
       field: "fimDeslocamento",
       headerName: "Fim",
+      minWidth: 140,
+      width: 100,
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.fimDeslocamento
@@ -46,16 +60,22 @@ function Displacements() {
     {
       field: "checkList",
       headerName: "Checklist",
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "observacao",
       headerName: "Observação",
+      minWidth: 140,
+      width: 100,
       flex: 1,
     },
     {
       field: "idCliente",
       headerName: "Usuário",
+      minWidth: 140,
+      width: 100,
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.user ? params.row.user.nome : "",
@@ -63,6 +83,8 @@ function Displacements() {
     {
       field: "idCondutor",
       headerName: "Motorista",
+      minWidth: 140,
+      width: 100,
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.motorist ? params.row.motorist.nome : "",
@@ -70,6 +92,8 @@ function Displacements() {
     {
       field: "idVeiculo",
       headerName: "Veículo",
+      minWidth: 140,
+      width: 100,
       flex: 1,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.vehicle ? params.row.vehicle.marcaModelo : "",
