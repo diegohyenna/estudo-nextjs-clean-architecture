@@ -7,14 +7,14 @@ import React, { useContext, useEffect, useState } from "react";
 
 type FormProps = {
   useEffects?: {
-    action: any;
+    action: Function;
     dependencyArray?: Array<any>;
   };
   onSubmit: any;
   title: string;
   children: any;
   loading: boolean;
-  setLoading: any;
+  setLoading: React.Dispatch<any>;
 };
 
 function FormCreate({
@@ -27,24 +27,24 @@ function FormCreate({
 }: FormProps) {
   const router = useRouter();
 
-  useEffects
-    ? useEffect(() => {
-        let dependencyArrayValidation = useEffects?.dependencyArray
-          ? useEffects.dependencyArray?.map((items) => items != 0)
-          : [];
+  useEffect(() => {
+    if (!useEffects) setLoading(false);
 
-        if (
-          useEffects?.action &&
-          useEffects?.dependencyArray?.length &&
-          !dependencyArrayValidation?.includes(false)
-        ) {
-          useEffects
-            ?.action()
-            .then(() => setLoading(false))
-            .catch(() => setLoading(false));
-        }
-      }, [useEffects.dependencyArray])
-    : setLoading(false);
+    let dependencyArrayValidation = useEffects?.dependencyArray
+      ? useEffects.dependencyArray?.map((items) => items != 0)
+      : [];
+
+    if (
+      useEffects?.action &&
+      useEffects?.dependencyArray?.length &&
+      !dependencyArrayValidation?.includes(false)
+    ) {
+      useEffects
+        ?.action()
+        .then(() => setLoading(false))
+        .catch(() => setLoading(false));
+    }
+  }, [useEffects?.dependencyArray]);
 
   return (
     <form onSubmit={onSubmit}>

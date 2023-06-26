@@ -68,7 +68,9 @@ export abstract class BaseHttpGateway<T> {
 
   protected remove(path: string, id: number): Promise<StatusReturn> {
     try {
-      return this.http.delete(path, { data: { id } });
+      return this.http
+        .delete(path, { data: { id } })
+        .then(() => this.handleSuccess("Registro deletado com sucesso!"));
     } catch (error) {
       return this.handleError(error, "Erro ao realizar a requisição DELETE");
     }

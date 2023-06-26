@@ -62,8 +62,9 @@ export class UserHttpGateway
   }
 
   update(id: number, user: User): Promise<StatusReturn> {
-    const { numeroDocumento, tipoDocumento, ...dataFilterProp } = user.toJSON();
     try {
+      const { numeroDocumento, tipoDocumento, ...dataFilterProp } =
+        user.toJSON();
       return this.put(`${this.CONST_PATH}/${id}`, dataFilterProp);
     } catch (error: any) {
       return this.handleError(
@@ -74,9 +75,7 @@ export class UserHttpGateway
   }
   delete(id: number): Promise<StatusReturn> {
     try {
-      return this.remove(`${this.CONST_PATH}/${id}`, id).then(() =>
-        this.handleSuccess("Registro deletado com sucesso!")
-      );
+      return this.remove(`${this.CONST_PATH}/${id}`, id);
     } catch (error: any) {
       return this.handleError(
         error,

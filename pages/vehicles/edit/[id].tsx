@@ -1,176 +1,148 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { GetVehicleUseCase } from "@/src/core/application/use-cases/vehicle/get-vehicle.use-case";
-import { UpdateVehicleUseCase } from "@/src/core/application/use-cases/vehicle/update-vehicle.use-case";
-import { Vehicle, VehiclesProps } from "@/src/core/domain/entities/vehicle";
-import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
-import http from "@/src/core/infra/http";
-import Button from "@mui/material/Button";
+import { Vehicle } from "@/src/core/domain/entities/vehicle";
 import Grid from "@mui/material/Grid";
-import Item from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 
 function Edit() {
   const router = useRouter();
 
-  const { handleOpenAlert } = useContext(GlobalContext);
+  const { handleOpenAlert, vehicleUseCases } = useContext(GlobalContext);
 
-  const [vehicle, setVehicle] = useState<VehiclesProps>({
-    placa: "",
-    anoFabricacao: 0,
-    kmAtual: 0,
-    marcaModelo: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   const id = router.query?.id ? +router.query.id : 0;
 
-  const gateway = new VehicleHttpGateway(http);
-  const useCaseGet = new GetVehicleUseCase(gateway);
-  const useCaseUpdate = new UpdateVehicleUseCase(gateway);
+  const [loading, setLoading] = useState(true);
 
-  const getByIdPromise = (id: number) => {
-    return new Promise((resolve, reject) => {
-      useCaseGet
-        .execute(id)
-        .then(async (res) => {
-          const vehicle = await res.toJSON();
-          setVehicle(vehicle);
-          resolve(true);
-        })
-        .catch((res) => {
-          router.push("/vehicles").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Houve algum erro",
-              status: "error",
-            });
-            reject();
+  const getUserById = () => {
+    return vehicleUseCases.useCaseGet
+      .execute(id)
+      .then(async (res) => {
+        setLoading(true);
+        const vehicle: any = await res.toJSON();
+
+        for (let prop in vehicle) {
+          setValue(prop, vehicle[prop]);
+        }
+
+        return Promise.resolve(true);
+      })
+      .catch((res) => {
+        router.push("/vehicles").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Houve algum erro",
+            status: "error",
           });
+          return Promise.reject();
         });
-    });
+      });
   };
 
-  const handleSubmitPromise = () => {
-    return new Promise((resolve, reject) => {
-      const data = new Vehicle({ ...vehicle });
-      useCaseUpdate
-        .execute(id, data)
-        .then((res) => {
-          router.push("/vehicles").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Sucesso!",
-              status: "success",
-            });
-            return resolve(true);
-          });
-        })
-        .catch((res) => {
-          router.push("/vehicles").then(() => {
-            handleOpenAlert({
-              open: true,
-              message: res?.message || "Houve algum erro",
-              status: "error",
-            });
-            return reject();
+  const onSubmit = (data: any) => {
+    const obj = new Vehicle(data);
+
+    return vehicleUseCases.useCaseUpdate
+      .execute(id, obj)
+      .then((res) => {
+        router.push("/vehicles").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Sucesso!",
+            status: "success",
           });
         });
-    });
-  };
-
-  const onChange = (e: any) => {
-    setVehicle({ ...vehicle, [e.id]: e.value });
+      })
+      .catch((res) => {
+        router.push("/vehicles").then(() => {
+          handleOpenAlert({
+            open: true,
+            message: res?.message || "Houve algum erro",
+            status: "error",
+          });
+        });
+      });
   };
 
   return (
     <FormCreate
       title="Editar o veículo"
-      handleSubmitPromise={handleSubmitPromise}
-      id={id}
-      getByIdPromise={getByIdPromise}
+      onSubmit={handleSubmit(onSubmit)}
+      loading={loading}
+      setLoading={setLoading}
+      useEffects={{ action: getUserById, dependencyArray: [id, loading] }}
     >
-      <Grid item xs={12} sm={12} md={12}>
-        <Item>
+      <>
+        <Grid item xs={12} sm={12} md={12}>
           <TextField
-            required
             margin="dense"
             id="marcaModelo"
             label="Marca/Modelo"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.marcaModelo}
             title="Digite a marca ou modelo do veiculo"
+            error={errors.marcaModelo ? true : false}
+            helperText={errors.marcaModelo ? errors.marcaModelo.message : ""}
+            {...register("marcaModelo", {
+              required: {
+                value: true,
+                message: "Digite a marca ou modelo do veiculo",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
-            disabled
-            margin="dense"
-            id="placa"
-            label="Placa"
-            type="text"
-            fullWidth
-            value={vehicle.placa}
-            title="Digite a placa do veiculo"
-          />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Item>
-          <TextField
-            required
             margin="dense"
             id="anoFabricacao"
             label="Ano de fabricação"
-            type="number"
+            type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.anoFabricacao}
             title="Informe o ano de fabricação do veiculo"
+            error={errors.anoFabricacao ? true : false}
+            helperText={
+              errors.anoFabricacao ? errors.anoFabricacao.message : ""
+            }
+            {...register("anoFabricacao", {
+              required: {
+                value: true,
+                message: "Informe o ano de fabricação do veiculo",
+              },
+              pattern: {
+                value: /^\d{4}$/,
+                message: "Digite um ano válido!",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-      <Grid item xs={12} sm={12} md={4}>
-        <Item>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
           <TextField
-            required
             margin="dense"
             id="kmAtual"
             label="Kilometragem"
             type="text"
             fullWidth
-            onChange={(e) => onChange(e.target)}
-            value={vehicle.kmAtual}
             title="Informe a kilometragem do veiculo"
+            error={errors.kmAtual ? true : false}
+            helperText={errors.kmAtual ? errors.kmAtual.message : ""}
+            {...register("kmAtual", {
+              required: {
+                value: true,
+                message: "Informe a kilometragem do veiculo",
+              },
+            })}
           />
-        </Item>
-      </Grid>
-
-      <Grid container item spacing={1} xs={12}>
-        <Grid item>
-          <Item>
-            <Button type="submit" variant="contained" color="success">
-              Salvar
-            </Button>
-          </Item>
         </Grid>
-        <Grid item>
-          <Item>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => router.back()}
-            >
-              Voltar
-            </Button>
-          </Item>
-        </Grid>
-      </Grid>
+      </>
     </FormCreate>
   );
 }

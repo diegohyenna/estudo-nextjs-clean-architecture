@@ -1,17 +1,10 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
-import { ListMotoristUseCase } from "@/src/core/application/use-cases/motorist/list-motorist.use-case";
-import { ListUserUseCase } from "@/src/core/application/use-cases/user/list-user.use-case";
-import { ListVehicleUseCase } from "@/src/core/application/use-cases/vehicle/list-vehicle.use-case";
 import { Displacement } from "@/src/core/domain/entities/displacement";
 import { MotoristsProps } from "@/src/core/domain/entities/motorist";
 import { UsersProps } from "@/src/core/domain/entities/user";
 import { VehiclesProps } from "@/src/core/domain/entities/vehicle";
-import { MotoristHttpGateway } from "@/src/core/infra/gateways/motorist-http.gateway";
-import { UserHttpGateway } from "@/src/core/infra/gateways/user-http.gateway";
-import { VehicleHttpGateway } from "@/src/core/infra/gateways/vehicle-http.gateway";
-import http from "@/src/core/infra/http";
-import { FormControl, MenuItem, TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
@@ -20,7 +13,13 @@ import { useForm } from "react-hook-form";
 function Create() {
   const router = useRouter();
 
-  const { handleOpenAlert, displacementUseCases } = useContext(GlobalContext);
+  const {
+    handleOpenAlert,
+    displacementUseCases,
+    userUseCases,
+    motoristUseCases,
+    vehicleUseCases,
+  } = useContext(GlobalContext);
 
   const [user, setUser] = useState<UsersProps[]>([]);
   const [motorist, setMotorist] = useState<MotoristsProps[]>([]);
@@ -69,24 +68,15 @@ function Create() {
   };
 
   const useEffectAction = () => {
-    const userGateway = new UserHttpGateway(http);
-    const useCaseUser = new ListUserUseCase(userGateway);
-
-    const motoristGateway = new MotoristHttpGateway(http);
-    const useCaseMotorist = new ListMotoristUseCase(motoristGateway);
-
-    const vehicleGateway = new VehicleHttpGateway(http);
-    const useCaseVehicle = new ListVehicleUseCase(vehicleGateway);
-
-    const userPromise = useCaseUser
+    const userPromise = userUseCases.useCaseList
       .execute()
       .then((res) => setUser(res.map((data) => data.toJSON())));
 
-    const motoristPromise = useCaseMotorist
+    const motoristPromise = motoristUseCases.useCaseList
       .execute()
       .then((res) => setMotorist(res.map((data) => data.toJSON())));
 
-    const vehiclePromise = useCaseVehicle
+    const vehiclePromise = vehicleUseCases.useCaseList
       .execute()
       .then((res) => setVehicle(res.map((data) => data.toJSON())));
 
