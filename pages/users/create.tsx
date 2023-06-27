@@ -1,11 +1,13 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { User } from "@/src/core/domain/entities/user";
+import { MenuItem } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { PatternFormat } from "react-number-format";
 
 function Create() {
   const router = useRouter();
@@ -17,6 +19,8 @@ function Create() {
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -43,6 +47,11 @@ function Create() {
           });
         });
       });
+  };
+
+  const onChange = (e: any) => {
+    console.log(e);
+    // setValue("tipoDocumento", e);
   };
 
   return (
@@ -72,12 +81,14 @@ function Create() {
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
         <TextField
-          margin="dense"
+          sx={{ marginTop: "8px", marginBottom: "4px" }}
           id="tipoDocumento"
-          label="Tipo de Documento"
-          type="text"
+          label="Selecione o Tipo de documento"
+          select
+          onChangeCapture={(e) => onChange(e.target)}
+          onInputCapture={(e) => onChange(e.target)}
+          defaultValue={"CPF"}
           fullWidth
-          title="Informe o tipo do documento"
           error={errors.tipoDocumento ? true : false}
           helperText={
             errors.tipoDocumento ? (errors.tipoDocumento.message as string) : ""
@@ -88,10 +99,23 @@ function Create() {
               message: "Digite o tipo do documento",
             },
           })}
-        />
+        >
+          {["CPF", "CNPJ"].map((item) => (
+            <MenuItem key={item} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </TextField>
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
-        <TextField
+        <PatternFormat
+          format={
+            getValues("tipoDocumento") == "CPF"
+              ? "###.###.###-##"
+              : "##.###.###/####-##"
+          }
+          mask="_"
+          customInput={TextField}
           margin="dense"
           id="numeroDocumento"
           label="Numero do Documento"
@@ -108,6 +132,11 @@ function Create() {
             required: {
               value: true,
               message: "Digite o número do documento",
+            },
+            pattern: {
+              value:
+                /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/,
+              message: "Digite um número válido",
             },
           })}
         />
