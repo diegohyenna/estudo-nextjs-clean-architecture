@@ -104,7 +104,7 @@ function Edit() {
             margin="dense"
             id="fimDeslocamento"
             label="Fim deslocamento"
-            type="text"
+            type="date"
             fullWidth
             title="Informe o fim do deslocamento"
             onFocus={(e) => onFocus(e.target)}
