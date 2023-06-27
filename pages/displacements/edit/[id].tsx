@@ -1,6 +1,7 @@
 import FormCreate from "@/src/components/forms/create";
 import { GlobalContext } from "@/src/contexts/GlobalProvider";
 import { Displacement } from "@/src/core/domain/entities/displacement";
+import { formatDate } from "@/src/utils/helpers";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
@@ -33,6 +34,12 @@ function Edit() {
         for (let prop in displacement) {
           setValue(prop, displacement[prop]);
         }
+
+        const newDate = displacement["fimDeslocamento"]
+          ? new Date(displacement["fimDeslocamento"])
+          : null;
+
+        setValue("fimDeslocamento", formatDate(newDate));
 
         return Promise.resolve(true);
       })
@@ -96,7 +103,7 @@ function Edit() {
           <TextField
             margin="dense"
             id="fimDeslocamento"
-            label="Início deslocamento"
+            label="Fim deslocamento"
             type="text"
             fullWidth
             title="Informe o fim do deslocamento"
