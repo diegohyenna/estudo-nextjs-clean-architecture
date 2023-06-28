@@ -76,7 +76,7 @@ function Create() {
           <TextField
             margin="dense"
             id="placa"
-            label="Marca/Modelo"
+            label="Placa"
             type="text"
             fullWidth
             title="Digite a placa do veiculo"
@@ -95,7 +95,7 @@ function Create() {
             margin="dense"
             id="anoFabricacao"
             label="Ano de fabricação"
-            type="text"
+            type="number"
             fullWidth
             title="Informe o ano de fabricação do veiculo"
             error={errors.anoFabricacao ? true : false}

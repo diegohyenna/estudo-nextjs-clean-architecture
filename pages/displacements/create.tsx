@@ -109,6 +109,7 @@ function Create() {
             label="Selecione o Usuário"
             select
             fullWidth
+            defaultValue=""
             error={errors.idCliente ? true : false}
             helperText={errors.idCliente && "Selecione um usuário"}
             {...register("idCliente", { required: true })}
@@ -127,6 +128,7 @@ function Create() {
             label="Selecione o Motorista"
             select
             fullWidth
+            defaultValue=""
             error={errors.idCondutor ? true : false}
             helperText={errors.idCondutor && "Selecione um motorista"}
             {...register("idCondutor", { required: true })}
@@ -145,6 +147,7 @@ function Create() {
             label="Selecione o Veículo"
             select
             fullWidth
+            defaultValue=""
             error={errors.idVeiculo ? true : false}
             helperText={errors.idVeiculo && "Selecione um veículo"}
             {...register("idVeiculo", { required: true })}
