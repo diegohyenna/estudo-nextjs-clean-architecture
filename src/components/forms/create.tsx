@@ -18,11 +18,11 @@ type FormProps = {
   setLoading: React.Dispatch<any>;
 };
 
-// const FormContainer = styled()`
-//   .MuiDivider-root {
-
-//   }
-// `;
+const FormContainer = styled.div`
+  .Mui-disabled {
+    background-color: #dbdbdb;
+  }
+`;
 
 function FormCreate({
   useEffects,
@@ -54,43 +54,45 @@ function FormCreate({
   }, [useEffects?.dependencyArray]);
 
   return (
-    <form onSubmit={onSubmit}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} md={12}>
-          <Divider sx={{ whiteSpace: "unset" }}>
-            <Typography variant="h4">{title}</Typography>
-          </Divider>
-          {loading && (
-            <Item>
-              <CircularProgress />
-            </Item>
-          )}
-        </Grid>
-
-        {!loading && <>{children}</>}
-
-        <Grid container item spacing={1} xs={12}>
-          <Grid item>
-            <Item>
-              <Button type="submit" variant="contained" color="success">
-                Salvar
-              </Button>
-            </Item>
+    <FormContainer>
+      <form onSubmit={onSubmit}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={12} md={12}>
+            <Divider sx={{ whiteSpace: "unset" }}>
+              <Typography variant="h4">{title}</Typography>
+            </Divider>
+            {loading && (
+              <Item>
+                <CircularProgress />
+              </Item>
+            )}
           </Grid>
-          <Grid item>
-            <Item>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => router.back()}
-              >
-                Voltar
-              </Button>
-            </Item>
+
+          {!loading && <>{children}</>}
+
+          <Grid container item spacing={1} xs={12}>
+            <Grid item>
+              <Item>
+                <Button type="submit" variant="contained" color="success">
+                  Salvar
+                </Button>
+              </Item>
+            </Grid>
+            <Grid item>
+              <Item>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => router.back()}
+                >
+                  Voltar
+                </Button>
+              </Item>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </form>
+      </form>
+    </FormContainer>
   );
 }
 

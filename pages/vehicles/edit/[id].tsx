@@ -107,7 +107,7 @@ function Edit() {
             margin="dense"
             id="anoFabricacao"
             label="Ano de fabricação"
-            type="text"
+            type="number"
             fullWidth
             title="Informe o ano de fabricação do veiculo"
             error={errors.anoFabricacao ? true : false}

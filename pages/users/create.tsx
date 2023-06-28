@@ -5,9 +5,14 @@ import { MenuItem } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useContext, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { PatternFormat } from "react-number-format";
+
+type FormatMaskProps = {
+  prop: string;
+  format: "tipoDocumento" | "";
+};
 
 function Create() {
   const router = useRouter();
@@ -16,11 +21,25 @@ function Create() {
 
   const [loading, setLoading] = useState(true);
 
+  const [formatMask, setFormatMask] = useState<FormatMaskProps>({
+    prop: "",
+    format: "",
+  });
+
+  const maskTipoDocumento = (value: any) =>
+    value == "CPF"
+      ? "###.###.###-##"
+      : value == "CNPJ"
+      ? "##.###.###/####-##"
+      : "";
+
+  const formats: any = { tipoDocumento: maskTipoDocumento };
+
   const {
     register,
     handleSubmit,
-    getValues,
-    setValue,
+    control,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -49,10 +68,19 @@ function Create() {
       });
   };
 
-  const onChange = (e: any) => {
-    console.log(e);
-    // setValue("tipoDocumento", e);
-  };
+  const tipoDocumentoProp = watch("tipoDocumento");
+
+  useEffect(() => {
+    let prop = "tipoDocumento";
+    let propValue = tipoDocumentoProp;
+
+    if (propValue && formats[prop]) {
+      setFormatMask({
+        prop,
+        format: formats[prop](propValue),
+      });
+    }
+  }, [tipoDocumentoProp]);
 
   return (
     <FormCreate
@@ -85,10 +113,8 @@ function Create() {
           id="tipoDocumento"
           label="Selecione o Tipo de documento"
           select
-          onChangeCapture={(e) => onChange(e.target)}
-          onInputCapture={(e) => onChange(e.target)}
-          defaultValue={"CPF"}
           fullWidth
+          defaultValue=""
           error={errors.tipoDocumento ? true : false}
           helperText={
             errors.tipoDocumento ? (errors.tipoDocumento.message as string) : ""
@@ -108,27 +134,10 @@ function Create() {
         </TextField>
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
-        <PatternFormat
-          format={
-            getValues("tipoDocumento") == "CPF"
-              ? "###.###.###-##"
-              : "##.###.###/####-##"
-          }
-          mask="_"
-          customInput={TextField}
-          margin="dense"
-          id="numeroDocumento"
-          label="Numero do Documento"
-          type="text"
-          fullWidth
-          title="Informe o numero do documento"
-          error={errors.numeroDocumento ? true : false}
-          helperText={
-            errors.numeroDocumento
-              ? (errors.numeroDocumento.message as string)
-              : ""
-          }
-          {...register("numeroDocumento", {
+        <Controller
+          name="numeroDocumento"
+          control={control}
+          rules={{
             required: {
               value: true,
               message: "Digite o número do documento",
@@ -138,8 +147,29 @@ function Create() {
                 /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/,
               message: "Digite um número válido",
             },
-          })}
-        />
+          }}
+          render={({ field }) => (
+            <PatternFormat
+              format={
+                formatMask.prop == "tipoDocumento" ? formatMask.format : ""
+              }
+              mask="_"
+              {...field}
+              disabled={!tipoDocumentoProp}
+              customInput={TextField}
+              margin="dense"
+              type="text"
+              fullWidth
+              title="Informe o numero do documento"
+              error={errors.numeroDocumento ? true : false}
+              helperText={
+                errors.numeroDocumento
+                  ? (errors.numeroDocumento.message as string)
+                  : ""
+              }
+            />
+          )}
+        ></Controller>
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
         <TextField
