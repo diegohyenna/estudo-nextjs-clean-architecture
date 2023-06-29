@@ -2,7 +2,6 @@ import { AxiosInstance } from "axios";
 import { StatusReturn } from "../http";
 
 export abstract class BaseHttpGateway<T> {
-  protected abstract readonly CONST_PATH: string;
   protected http: AxiosInstance;
 
   constructor(http: AxiosInstance) {
