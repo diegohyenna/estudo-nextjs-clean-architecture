@@ -133,7 +133,7 @@ function Edit() {
             margin="dense"
             id="kmAtual"
             label="Kilometragem"
-            type="text"
+            type="number"
             fullWidth
             title="Informe a kilometragem do veiculo"
             error={errors.kmAtual ? true : false}
