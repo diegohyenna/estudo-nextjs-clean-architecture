@@ -62,7 +62,7 @@ export default function Table({
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "Ações",
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }: any) => {

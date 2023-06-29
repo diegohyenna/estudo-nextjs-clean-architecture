@@ -41,18 +41,19 @@ export default function Home() {
           candidatos na vaga. Então resolvi aplicar conceitos de uma arquitetura
           de software. Resolvi{" "}
           <span className="Span">separar a regra de negocio da aplicação</span>.
-          Para isso implementei uma versão da &quot;personalizada&quot; (o que
-          eu pude entender) da <span className="Span">Clean Architecture</span>,
-          baseado em um rápido estudo.
+          Para isso implementei uma versão da{" "}
+          <span className="Span">Clean Architecture</span>, baseado em um rápido
+          estudo.
         </Typography>
 
         <Typography variant="h5">Segundo</Typography>
         <Typography variant="body1" className="Paragraphy">
           Em se tratando de testes, eu não uso e não conheço o{" "}
-          <span className="Span">Jest</span>, por isso não apliquei. Não é
-          difícil para mim aprender, só exigirá uma mudança de cultura no meu
-          desenvolvimento que seria algo orientado a testes, daí o uso e estudo
-          de <span className="Span">TDD</span>
+          <span className="Span">Jest</span>, por isso não apliquei. Já usei
+          testes com Jasmine no Angular. Não é difícil para mim aprender, só
+          exigirá uma mudança de cultura no meu desenvolvimento que seria algo
+          orientado a testes, daí o uso e estudo de{" "}
+          <span className="Span">TDD</span>
         </Typography>
 
         <Typography variant="h5">Concluindo</Typography>
@@ -85,6 +86,7 @@ export default function Home() {
           <li>Material UI</li>
           <li>React Hook Form</li>
           <li>Axios</li>
+          <li>React Number Format</li>
         </ul>
 
         <Divider sx={{ margin: "24px 0" }} />
