@@ -1,5 +1,5 @@
 import { Displacement } from "../../../domain/entities/displacement";
-import { DisplacementGateway } from "../../../domain/gateways/displacement.gateway";
+import { DisplacementGateway } from "../../../domain/interfaces/displacement.gateway";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class GetDisplacementUseCase implements BaseUseCase {

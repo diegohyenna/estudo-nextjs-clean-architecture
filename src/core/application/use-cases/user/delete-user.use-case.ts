@@ -1,4 +1,4 @@
-import { UserGateway } from "../../../domain/gateways/user.gateway";
+import { UserGateway } from "../../../domain/interfaces/user.gateway";
 import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 

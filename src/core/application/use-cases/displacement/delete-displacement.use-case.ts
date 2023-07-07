@@ -1,4 +1,4 @@
-import { DisplacementGateway } from "../../../domain/gateways/displacement.gateway";
+import { DisplacementGateway } from "../../../domain/interfaces/displacement.gateway";
 import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 

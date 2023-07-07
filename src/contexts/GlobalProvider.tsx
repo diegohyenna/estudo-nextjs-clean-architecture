@@ -1,4 +1,3 @@
-import http from "@/src/core/infra/http";
 import React, { createContext, useState } from "react";
 
 import { IDisplacementUseCase } from "../core/application/interfaces/displacement-use-case.interface";
@@ -25,10 +24,17 @@ import { DeleteVehicleUseCase } from "../core/application/use-cases/vehicle/dele
 import { GetVehicleUseCase } from "../core/application/use-cases/vehicle/get-vehicle.use-case";
 import { ListVehicleUseCase } from "../core/application/use-cases/vehicle/list-vehicle.use-case";
 import { UpdateVehicleUseCase } from "../core/application/use-cases/vehicle/update-vehicle.use-case";
-import { DisplacementHttpGateway } from "../core/infra/gateways/displacement-http.gateway";
-import { MotoristHttpGateway } from "../core/infra/gateways/motorist-http.gateway";
-import { UserHttpGateway } from "../core/infra/gateways/user-http.gateway";
-import { VehicleHttpGateway } from "../core/infra/gateways/vehicle-http.gateway";
+import { Displacement } from "../core/domain/entities/displacement";
+import { Motorist } from "../core/domain/entities/motorist";
+import { User } from "../core/domain/entities/user";
+import { Vehicle } from "../core/domain/entities/vehicle";
+import { DisplacementHttpGateway } from "../core/infra/gateways/http/displacement-http.gateway";
+import { MotoristHttpGateway } from "../core/infra/gateways/http/motorist-http.gateway";
+import { UserInMemoryGateway } from "../core/infra/gateways/in-memory/user-in-memory.gateway";
+import { VehicleInMemoryGateway } from "../core/infra/gateways/in-memory/vehicle-in-memory.gateway";
+import { HttpRepository } from "../core/infra/repository/http/http.repository";
+import { InMemoryRepository } from "../core/infra/repository/in-memory/in-memory.repository";
+import { UserHttpGateway } from "../core/infra/gateways/http/user-http.gateway";
 
 export type Alert = {
   open: boolean;
@@ -46,11 +52,16 @@ export type GlobalValues = {
   userUseCases: IUserUseCase;
 };
 
-const gatewayMotorist = new MotoristHttpGateway(http);
-const gatewayUser = new UserHttpGateway(http);
-const gatewayVehicle = new VehicleHttpGateway(http);
+const repositoryDisplacement = new HttpRepository<Displacement>("Deslocamento");
+const repositoryUser = new HttpRepository<User>("Cliente");
+const repositoryMotorist = new HttpRepository<Motorist>("Condutor");
+const repositoryVehicle = new InMemoryRepository<Vehicle>();
+
+const gatewayMotorist = new MotoristHttpGateway(repositoryMotorist);
+const gatewayUser = new UserHttpGateway(repositoryUser);
+const gatewayVehicle = new VehicleInMemoryGateway(repositoryVehicle);
 const gatewayDisplacement = new DisplacementHttpGateway(
-  http,
+  repositoryDisplacement,
   gatewayMotorist,
   gatewayUser,
   gatewayVehicle

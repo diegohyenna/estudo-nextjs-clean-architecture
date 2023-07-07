@@ -1,4 +1,4 @@
-import { MotoristGateway } from "../../../domain/gateways/motorist.gateway";
+import { MotoristGateway } from "../../../domain/interfaces/motorist.gateway";
 import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 

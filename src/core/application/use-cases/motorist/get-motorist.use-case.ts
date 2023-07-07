@@ -1,5 +1,5 @@
 import { Motorist } from "../../../domain/entities/motorist";
-import { MotoristGateway } from "../../../domain/gateways/motorist.gateway";
+import { MotoristGateway } from "../../../domain/interfaces/motorist.gateway";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class GetMotoristUseCase implements BaseUseCase {
