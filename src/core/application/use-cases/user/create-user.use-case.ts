@@ -1,12 +1,12 @@
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
+
 import { User } from "../../../domain/entities/user";
-import { UserGateway } from "../../../domain/interfaces/user.gateway";
-import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class CreateUserUseCase implements BaseUseCase {
-  constructor(private userGateway: UserGateway) {}
+  constructor(private repository: IBaseRepository<User>) {}
 
-  async execute(user: User): Promise<StatusReturn> {
-    return this.userGateway.save(user);
+  async execute(user: User) {
+    return this.repository.save(user);
   }
 }

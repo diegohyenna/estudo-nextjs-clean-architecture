@@ -1,11 +1,12 @@
-import { UserHttpGateway } from "@/src/core/infra/gateways/http/user-http.gateway";
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
+
 import { User } from "../../../domain/entities/user";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class ListUserUseCase implements BaseUseCase {
-  constructor(private userGateway: UserHttpGateway) {}
+  constructor(private repository: IBaseRepository<User>) {}
 
-  async execute(): Promise<User[]> {
-    return this.userGateway.getAll();
+  async execute() {
+    return this.repository.getAll();
   }
 }

@@ -30,11 +30,9 @@ import { User } from "../core/domain/entities/user";
 import { Vehicle } from "../core/domain/entities/vehicle";
 import { DisplacementHttpGateway } from "../core/infra/gateways/http/displacement-http.gateway";
 import { MotoristHttpGateway } from "../core/infra/gateways/http/motorist-http.gateway";
-import { UserInMemoryGateway } from "../core/infra/gateways/in-memory/user-in-memory.gateway";
-import { VehicleInMemoryGateway } from "../core/infra/gateways/in-memory/vehicle-in-memory.gateway";
-import { HttpRepository } from "../core/infra/repository/http/http.repository";
-import { InMemoryRepository } from "../core/infra/repository/in-memory/in-memory.repository";
 import { UserHttpGateway } from "../core/infra/gateways/http/user-http.gateway";
+import { VehicleHttpGateway } from "../core/infra/gateways/http/vehicle-http.gateway";
+import { HttpRepository } from "../core/infra/repository/http/http.repository";
 
 export type Alert = {
   open: boolean;
@@ -55,11 +53,11 @@ export type GlobalValues = {
 const repositoryDisplacement = new HttpRepository<Displacement>("Deslocamento");
 const repositoryUser = new HttpRepository<User>("Cliente");
 const repositoryMotorist = new HttpRepository<Motorist>("Condutor");
-const repositoryVehicle = new InMemoryRepository<Vehicle>();
+const repositoryVehicle = new HttpRepository<Vehicle>("Veiculo");
 
 const gatewayMotorist = new MotoristHttpGateway(repositoryMotorist);
 const gatewayUser = new UserHttpGateway(repositoryUser);
-const gatewayVehicle = new VehicleInMemoryGateway(repositoryVehicle);
+const gatewayVehicle = new VehicleHttpGateway(repositoryVehicle);
 const gatewayDisplacement = new DisplacementHttpGateway(
   repositoryDisplacement,
   gatewayMotorist,
