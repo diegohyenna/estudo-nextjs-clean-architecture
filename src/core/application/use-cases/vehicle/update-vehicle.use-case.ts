@@ -1,12 +1,12 @@
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
+
 import { Vehicle } from "../../../domain/entities/vehicle";
-import { VehicleGateway } from "../../../domain/gateways/vehicle.gateway";
-import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class UpdateVehicleUseCase implements BaseUseCase {
-  constructor(private vehicleGateway: VehicleGateway) {}
+  constructor(private repository: IBaseRepository<Vehicle>) {}
 
-  async execute(id: number, vehicle: Vehicle): Promise<StatusReturn> {
-    return this.vehicleGateway.update(id, vehicle);
+  async execute(id: number, vehicle: Vehicle) {
+    return this.repository.update(id, vehicle);
   }
 }

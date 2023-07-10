@@ -1,12 +1,12 @@
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
+
 import { Motorist } from "../../../domain/entities/motorist";
-import { MotoristGateway } from "../../../domain/gateways/motorist.gateway";
-import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class CreateMotoristUseCase implements BaseUseCase {
-  constructor(private motoristGateway: MotoristGateway) {}
+  constructor(private repository: IBaseRepository<Motorist>) {}
 
-  async execute(motorist: Motorist): Promise<StatusReturn> {
-    return this.motoristGateway.save(motorist);
+  async execute(motorist: Motorist) {
+    return this.repository.save(motorist);
   }
 }

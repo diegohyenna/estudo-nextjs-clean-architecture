@@ -1,12 +1,12 @@
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
+
 import { Displacement } from "../../../domain/entities/displacement";
-import { DisplacementGateway } from "../../../domain/gateways/displacement.gateway";
-import { StatusReturn } from "../../../infra/http";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class UpdateDisplacementUseCase implements BaseUseCase {
-  constructor(private displacementGateway: DisplacementGateway) {}
+  constructor(private repository: IBaseRepository<Displacement>) {}
 
-  async execute(id: number, displacement: Displacement): Promise<StatusReturn> {
-    return this.displacementGateway.update(id, displacement);
+  async execute(id: number, displacement: Displacement) {
+    return this.repository.update(id, displacement);
   }
 }

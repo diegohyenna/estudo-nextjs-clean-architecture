@@ -1,11 +1,12 @@
-import { UserGateway } from "../../../domain/gateways/user.gateway";
-import { StatusReturn } from "../../../infra/http";
+import { User } from "@/src/core/domain/entities/user";
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
+
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class DeleteUserUseCase implements BaseUseCase {
-  constructor(private userGateway: UserGateway) {}
+  constructor(private repository: IBaseRepository<User>) {}
 
-  async execute(id: number): Promise<StatusReturn> {
-    return this.userGateway.delete(id);
+  async execute(id: number) {
+    return this.repository.delete(id);
   }
 }

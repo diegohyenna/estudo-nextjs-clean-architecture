@@ -1,11 +1,11 @@
+import { IBaseRepository } from "@/src/core/domain/interfaces/base.interface";
 import { Vehicle } from "../../../domain/entities/vehicle";
-import { VehicleGateway } from "../../../domain/gateways/vehicle.gateway";
 import { BaseUseCase } from "../../interfaces/base.interface";
 
 export class GetVehicleUseCase implements BaseUseCase {
-  constructor(private vehicleGateway: VehicleGateway) {}
+  constructor(private repository: IBaseRepository<Vehicle>) {}
 
-  async execute(id: number): Promise<Vehicle> {
-    return this.vehicleGateway.getById(id);
+  async execute(id: number) {
+    return this.repository.getById(id);
   }
 }

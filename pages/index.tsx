@@ -29,13 +29,6 @@ export default function Home() {
       <Grid item>
         <Typography variant="h5">Primeiro</Typography>
         <Typography variant="body1" className="Paragraphy">
-          Eu não domino muito o <span className="Span">Nextjs</span>, tudo que
-          fiz foi aprendido durante essas duas semanas. Componentizei e
-          reutilizei o máximo que meu conhecimento permitiu. Sobre o{" "}
-          <span className="Span">Material UI</span>, eu também não tenho muita
-          expertise, então não foquei muito em um layout bem elaborado.
-        </Typography>
-        <Typography variant="body1" className="Paragraphy">
           <span className="Span">Optei por meu projeto ter um diferencial</span>
           , algo que fugisse da caixinha, visto que pude observar que são muitos
           candidatos na vaga. Então resolvi aplicar conceitos de uma arquitetura
@@ -48,21 +41,10 @@ export default function Home() {
 
         <Typography variant="h5">Segundo</Typography>
         <Typography variant="body1" className="Paragraphy">
-          Em se tratando de testes, eu não uso e não conheço o{" "}
-          <span className="Span">Jest</span>, por isso não apliquei. Já usei
-          testes com Jasmine no Angular. Não é difícil para mim aprender, só
-          exigirá uma mudança de cultura no meu desenvolvimento que seria algo
-          orientado a testes, daí o uso e estudo de{" "}
-          <span className="Span">TDD</span>
-        </Typography>
-
-        <Typography variant="h5">Concluindo</Typography>
-        <Typography variant="body1" className="Paragraphy">
-          Enfim, nessas duas semanas pude aprender muito e aplicar conceitos que
-          tenho me interessado em aprender.{" "}
-          <span className="Span">
-            Imaginem o que posso fazer em tempo indeterminado na empresa?
-          </span>
+          Em se tratando de testes, eu configurei o{" "}
+          <span className="Span">Jest</span> e o{" "}
+          <span className="Span">Testing Library</span> no projeto e pretendo
+          subir as implementações em breve.
         </Typography>
 
         <Divider sx={{ margin: "24px 0" }} />
