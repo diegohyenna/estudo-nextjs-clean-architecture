@@ -13,7 +13,13 @@ Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [c
 ## Start via docker
 Deve ter o docker e o docker-compose instalado na maquina.
 
-- baixe o projeto e rode o comando na pasta raiz `docker-compose up -d`
+- Clone o projeto em [Github](https://github.com/diegohyenna/estudo-nextjs-clean-architecture)
+
+- Navegue até a pasta raiz do projeto e rode o comando `npm install`
+
+- Rode o comando na pasta raiz `docker-compose up -d`
+  
+- Abra o navegador em http://localhost:3000
 
 ## Tecnologias usadas
 
