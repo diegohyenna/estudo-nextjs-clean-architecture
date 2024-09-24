@@ -30,13 +30,17 @@ export default function Home() {
         <Typography variant="h5">Primeiro</Typography>
         <Typography variant="body1" className="Paragraphy">
           <span className="Span">Optei por meu projeto ter um diferencial</span>
-          , algo que fugisse da caixinha, visto que pude observar que são muitos
-          candidatos na vaga. Então resolvi aplicar conceitos de uma arquitetura
-          de software. Resolvi{" "}
+          , algo que fugisse da caixinha. Então resolvi aplicar conceitos de uma
+          arquitetura de software. Resolvi{" "}
           <span className="Span">separar a regra de negocio da aplicação</span>.
           Para isso implementei uma versão da{" "}
           <span className="Span">Clean Architecture</span>, baseado em um rápido
           estudo.
+        </Typography>
+
+        <Typography variant="body1" className="Paragraphy">
+          Também usei a <span className="Span">Context API</span> para fazer o
+          gerenciamento de estado da aplicação.
         </Typography>
 
         <Typography variant="h5">Segundo</Typography>
