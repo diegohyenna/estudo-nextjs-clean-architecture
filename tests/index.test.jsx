@@ -5,7 +5,7 @@ describe("Home", () => {
   // it("renders a heading", () => {
   //   render(<Home />);
 
-  //   const heading = screen.findAllByTitle("TESTE NATY");
+  //   const heading = screen.findAllByTitle("TESTE");
 
   //   heading.then((res) => console.log(res));
 

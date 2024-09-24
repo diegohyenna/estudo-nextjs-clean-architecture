@@ -1,10 +1,10 @@
-# Teste Secretária Naty
+# Estudos NextJS Clean Architecture
 
 Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [create-next-app](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Start local
 
-- Clone o projeto em [Teste Naty Github](https://github.com/diegohyenna/teste-naty)
+- Clone o projeto em [Github](https://github.com/diegohyenna/estudo-nextjs-clean-architecture)
 
 - Navegue até a pasta raiz do projeto e rode o comando `npm install`
 
@@ -18,7 +18,3 @@ Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [c
 - React Hook Form
 - Axios
 - React Number Format
-
-## Demonstração
-
-Acesse a demonstração do projeto aqui [Teste Naty Demo](https://teste-naty-teal.vercel.app)

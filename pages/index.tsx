@@ -51,7 +51,7 @@ export default function Home() {
 
         <Typography variant="h5">Repositorio do Projeto</Typography>
         <Button
-          href="https://github.com/diegohyenna/teste-naty"
+          href="https://github.com/diegohyenna/estudo-nextjs-clean-architecture"
           target="_blank"
           LinkComponent={Link}
           variant="outlined"
