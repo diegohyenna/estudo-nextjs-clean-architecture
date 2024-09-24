@@ -18,3 +18,4 @@ Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [c
 - React Hook Form
 - Axios
 - React Number Format
+- Context Api
