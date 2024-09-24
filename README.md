@@ -10,6 +10,11 @@ Esse projeto foi desenvolvido com [Next.js](https://nextjs.org/) e criado com [c
 
 - Depois rode o comando `npm run dev` para startar a aplicação e abra o navegador em http://localhost:3000
 
+## Start via docker
+Deve ter o docker e o docker-compose instalado na maquina.
+
+- baixe o projeto e rode o comando na pasta raiz `docker-compose up -d`
+
 ## Tecnologias usadas
 
 - Nextjs
